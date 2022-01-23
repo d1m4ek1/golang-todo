@@ -48,14 +48,30 @@ body {
     border: none;
     cursor: pointer;
 }
+.bg_colorizer__items > button.active {
+    animation-name: circleActive;
+    animation-timing-function: ease-in;
+    animation-iteration-count: infinite;
+    animation-duration: 3s;
+}
+@keyframes circleActive {
+    0% {
+        box-shadow: 0 0 0 2px white, 0 0 0 0 rgb(119, 255, 119);
+    }
+    50% {
+        box-shadow: 0 0 0 2px white, 0 0 0 4px rgb(119, 255, 119);
+    }
+    100% {
+        box-shadow: 0 0 0 2px white, 0 0 0 0px rgb(119, 255, 119);
+    }
+}
 .bg_colorizer__items > button.active::before {
     content: '';
     position: absolute;
     left: 0;
-    bottom: -5px;
+    bottom: -10px;
     width: 100%;
     height: 3px;
-    background-color: rgb(0, 255, 0);
 }
 .bg_colorizer__items > button#bg_col_blue {
     background-color: rgb(163, 163, 255);
@@ -79,6 +95,7 @@ body {
     display: flex;
     justify-content: center;
     position: relative;
+    padding-bottom: 130px;
 }
 button.todo_create__btn {
     cursor: pointer;
@@ -95,6 +112,59 @@ button.todo_create__btn:hover {
     color: rgb(110, 255, 110);
     box-shadow: 0 5px 10px rgb(110, 255, 110, .4);
 }
+.todo_user__header {
+    text-align: center;
+    padding-bottom: 30px;
+}
+.todo_panel__items {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+.todo_panel__item {
+    margin: 20px 0;
+    padding: 20px;
+    width: 75%;
+    height: 100px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgb(0, 0, 0, .2);
+    overflow: hidden;
+}
+.todo_panel__header {
+    width: 20%;
+}
+.todo_panel__content {
+    height: 100px;
+    width: 70%;
+    overflow: hidden;
+}
+.todo_panel__change button {
+    background-color: rgb(255, 215, 129);
+}
+.todo_panel__delete button {
+    background-color: rgb(255, 138, 138);
+}
+.todo_panel__change, .todo_panel__delete {
+    width: 10%;
+    padding: 0 10px;
+}
+.todo_panel__change button, .todo_panel__delete button {
+    cursor: pointer;
+    width: 100%;
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+
+
+
+
 
 .todo_create__modal {
     position: absolute;

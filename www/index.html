@@ -1,4 +1,4 @@
-<!-- {{ define "index" }} -->
+{{ define "index" }}
 <!DOCTYPE html>
 <html>
     <head>
@@ -28,6 +28,55 @@
                 <div class="main_content">
                     <div class="todo_create">
                         <button class="todo_create__btn">Create ToDo</button>
+                    </div>
+                    <div class="todo_user">
+                        <div class="todo_user__header">
+                            <h2>Your ToDo</h2>
+                        </div>
+                        <div class="todo_panel__items">
+                            <div class="todo_panel__item">
+                                <div class="todo_panel__header">
+                                    <h2>Title</h2>
+                                    <h3>Tag</h3>
+                                </div>
+                                <div class="todo_panel__content">
+                                    <pre>fgsdfgsdf dsfgsdfg
+                                        fgsdfgsdf dsfgsdfg
+                                        fgsdfgsdf dsfgsdfg
+                                        fgsdfgsdf dsfgsdfg
+sdfgsdfg
+sdfgsdfgs dfgsdfg
+                                    </pre>
+                                </div>
+                                <div class="todo_panel__change">
+                                    <button id="todo_change">Change</button>
+                                </div>
+                                <div class="todo_panel__delete">
+                                    <button id="todo_delete">Delete</button>
+                                </div>
+                            </div>
+                            <div class="todo_panel__item">
+                                <div class="todo_panel__header">
+                                    <h2>Title</h2>
+                                    <h3>Tag</h3>
+                                </div>
+                                <div class="todo_panel__content">
+                                    <pre>fgsdfgsdf dsfgsdfg
+                                        fgsdfgsdf dsfgsdfg
+                                        fgsdfgsdf dsfgsdfg
+                                        fgsdfgsdf dsfgsdfg
+sdfgsdfg
+sdfgsdfgs dfgsdfg
+                                    </pre>
+                                </div>
+                                <div class="todo_panel__change">
+                                    <button id="todo_change">Change</button>
+                                </div>
+                                <div class="todo_panel__delete">
+                                    <button id="todo_delete">Delete</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -67,4 +116,4 @@
         <script src="./assets/app.js"></script>
     </body>
 </html>
-<!-- {{ end }} -->
+{{ end }}
