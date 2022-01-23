@@ -10,7 +10,59 @@
         <link rel="stylesheet" href="./assets/app.css">
     </head>
     <body>
-        
+        <main class="wrapper">
+            <div class="container">
+                <div class="main_header">
+                    <h1>My DataBase ToDo</h1>
+                </div>
+                <div class="bg_colorizer">
+                    <h2>Select theme</h2>
+                    <div class="bg_colorizer__items">
+                        <button id="bg_col_light" class="active"></button>
+                        <button id="bg_col_blue"></button>
+                        <button id="bg_col_dark"></button>
+                        <button id="bg_col_red"></button>
+                        <button id="bg_col_purple"></button>
+                    </div>
+                </div>
+                <div class="main_content">
+                    <div class="todo_create">
+                        <button class="todo_create__btn">Create ToDo</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Modal windows -->
+        <div class="todo_create__modal">
+            <div class="todo_create__modal_content">
+                <div class="todo_create__modal__header">
+                    <h1>Set title |</h1>
+                    <h3>Necessarily</h3>
+                </div>
+                <div class="todo_create__modal__inputs">
+                    <input type="text" name="title" id="todo_title" placeholder="Enter title...">
+                </div>
+                <div class="todo_create__modal__header">
+                    <h1>Set tag |</h1>
+                    <h3>Not necessarily, unique</h3>
+                </div>
+                <div class="todo_create__modal__inputs">
+                    <input type="text" name="tag" id="todo_tag" placeholder="Enter tag...">
+                </div>
+                <div class="todo_create__modal__header">
+                    <h1>Set text |</h1>
+                    <h3>Necessarily</h3>
+                </div>
+                <div class="todo_create__modal__inputs">
+                    <textarea type="text" name="text" id="todo_text" placeholder="Enter text..."></textarea>
+                </div>
+                <div class="todo_create__modal__create_btn">
+                    <button id="todo_create">Create ToDo</button>
+                </div>
+                <button class="modal_close__btn"></button>
+            </div>
+        </div>
         
         <script src="./assets/app.js"></script>
     </body>
