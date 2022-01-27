@@ -1,4 +1,4 @@
-module golang-todo/www/backend
+module golang-todo/www
 
 go 1.13
 
