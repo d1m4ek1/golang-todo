@@ -1,5 +1,7 @@
 @import url(./assets/css/Header.css);
 @import url(./assets/css/Main.css);
+@import url(./assets/css/Todo.css);
+@import url(./assets/css/Popups.css);
 
 * {
     margin: 0;
@@ -22,4 +24,23 @@ body {
 
 p, a {
     font-size: 18px;
+}
+.btn, .input {
+    outline: none;
+    border: none;
+    background-color: rgb(240, 240, 240);
+    border-radius: 10px;
+    height: 30px;
+    font-size: 15px;
+    transition: .3s;
+}
+.input {
+    padding-left: 10px;
+}
+.btn {
+    cursor: pointer;
+    padding: 0 10px;
+}
+.input:focus, .btn:hover {
+    box-shadow: 0 0 0 4px rgb(226, 226, 226);
 }

@@ -1,4 +1,5 @@
 .main {
+    position: relative;
     display: block;
     height: 100%;
     transition: 0.3s;
@@ -7,6 +8,18 @@
     margin-bottom: 10px;
     margin-left: 70px;
     margin-right: 20px;
+    animation-name: showMain;
+    animation-duration: 1s;
+}
+@keyframes showMain {
+    from {
+        left: -50%;
+        opacity: 0;
+    }
+    to {
+        left: 0;
+        opacity: 1;
+    }
 }
 .main_content {
     padding: 20px;
@@ -69,4 +82,22 @@
 .content_news__footer,
 .todo_rec__footer {
     padding-top: 10px;
+}
+.todo_rec__footer {
+    display: flex;
+    justify-content: space-between;
+}
+.todo_rec__footer p, .todo_rec__footer a {
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0 5px;
+}
+.todo_rec__footer p:nth-child(1) {
+    color: royalblue;
+}
+.todo_rec__footer p:nth-child(2) {
+    color: rgb(255, 174, 0);
+}
+.todo_rec__footer p:nth-child(3) {
+    color: tomato;
 }

@@ -47,6 +47,18 @@ module.exports = {
             filename: "./html/index.html",
             template: "./src/index.html"
         }),
+        new HtmlWebpackPlugin({
+            filename: "./html/pages/Todo.html",
+            template: "./src/html/Todo.html"
+        }),
+        new HtmlWebpackPlugin({
+            filename: "./html/template/Login.html",
+            template: "./src/html/popups/Login.html"
+        }),
+        new HtmlWebpackPlugin({
+            filename: "./html/pages/popups/TodoCreate.html",
+            template: "./src/html/popups/TodoCreate.html"
+        }),
         // new FaviconsWebpackPlugin({
         //     logo: './src/images/header/logo.png',
         //     prefix: "./static/images/"

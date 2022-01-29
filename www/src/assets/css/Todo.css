@@ -1,0 +1,20 @@
+.search_todo {
+    padding: 10px 0 40px 0;
+}
+.search_todo h2 {
+    padding-bottom: 10px;
+}
+.search_todo__inputs {
+    display: flex;
+    justify-content: space-between;
+}
+.input.search_todo_inp,
+.btn.search_todo_btn {
+    width: 48%;
+}
+.btn.new_todo_btn {
+    width: 100%;
+    height: 60px;
+    font-weight: bold;
+    font-size: 25px;
+}
