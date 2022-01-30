@@ -56,8 +56,8 @@ module.exports = {
             template: "./src/html/popups/Login.html"
         }),
         new HtmlWebpackPlugin({
-            filename: "./html/pages/popups/TodoCreate.html",
-            template: "./src/html/popups/TodoCreate.html"
+            filename: "./html/template/NewTodo.html",
+            template: "./src/html/popups/NewTodo.html"
         }),
         // new FaviconsWebpackPlugin({
         //     logo: './src/images/header/logo.png',

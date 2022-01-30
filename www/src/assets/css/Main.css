@@ -1,5 +1,4 @@
 .main {
-    position: relative;
     display: block;
     height: 100%;
     transition: 0.3s;
@@ -13,11 +12,9 @@
 }
 @keyframes showMain {
     from {
-        left: -50%;
         opacity: 0;
     }
     to {
-        left: 0;
         opacity: 1;
     }
 }

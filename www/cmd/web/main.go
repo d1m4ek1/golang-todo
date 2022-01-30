@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"golang-todo/www/pkg/autorizations"
+	"golang-todo/www/pkg/todo"
 	"html/template"
 	"net/http"
 
@@ -12,18 +14,27 @@ import (
 // PATHS
 const (
 	pathPopupSignInUpTpl string = "./ui/html/template/Login.html"
+	pathPopupNewToDo     string = "./ui/html/template/NewTodo.html"
 	pathTodoTpl          string = "./ui/html/pages/Todo.html"
 	pathIndexTpl         string = "./ui/html/index.html"
 )
 
 func todoPage(w http.ResponseWriter, r *http.Request) {
-	tpl, err := template.ParseFiles(pathTodoTpl, pathPopupSignInUpTpl)
+	tpl, err := template.ParseFiles(pathTodoTpl, pathPopupSignInUpTpl, pathPopupNewToDo)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	tpl.ExecuteTemplate(w, "todo", nil)
+	Data := struct {
+		UserLogin string
+		UserTodo  []todo.TodoList
+	}{
+		UserLogin: autorizations.AutorizedUserInfo.Login,
+		UserTodo:  todo.AllTodo(r),
+	}
+
+	tpl.ExecuteTemplate(w, "todo", Data)
 }
 
 func homePage(w http.ResponseWriter, r *http.Request) {
@@ -33,7 +44,19 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	tpl.ExecuteTemplate(w, "index", nil)
+	token, _ := r.Cookie("token")
+
+	if token == nil {
+		autorizations.AutorizedUserInfo.Login = ""
+	}
+
+	Data := struct {
+		UserLogin string
+	}{
+		UserLogin: autorizations.AutorizedUserInfo.Login,
+	}
+
+	tpl.ExecuteTemplate(w, "index", Data)
 }
 
 func handleFunc() {
@@ -41,6 +64,9 @@ func handleFunc() {
 	rtr := mux.NewRouter()
 	rtr.HandleFunc("/", homePage)
 	rtr.HandleFunc("/todo", todoPage)
+
+	rtr.HandleFunc("/user_signin", autorizations.SigninInUser)
+	rtr.HandleFunc("/user_signout", autorizations.UserSignOut)
 
 	http.Handle("/", rtr)
 	http.Handle("/static/assets/", http.StripPrefix("/static/assets/", http.FileServer(http.Dir("./ui/static/assets/"))))

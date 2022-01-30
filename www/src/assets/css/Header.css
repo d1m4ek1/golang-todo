@@ -96,7 +96,8 @@
     color: white;
 }
 .header_nav__signin,
-.header_nav__signup {
+.header_nav__signup,
+.header_nav__signout {
     width: 150px;
     height: 50px;
     display: flex;
@@ -105,7 +106,8 @@
     transition: .3s;
 }
 .header_nav__signin:hover,
-.header_nav__signup:hover {
+.header_nav__signup:hover,
+.header_nav__signout:hover {
     cursor: pointer;
     background-color: rgb(159, 236, 255);
     padding-left: 20px;

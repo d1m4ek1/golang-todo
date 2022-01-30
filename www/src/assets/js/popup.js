@@ -1,8 +1,11 @@
 const mainBlock = document.querySelector(".main");
 const popupSignInUp = document.querySelector(".popup_sign");
 
-const btnReg = document.querySelector(".header_nav__signin");
-const btnSign = document.querySelector(".header_nav__signup");
+let btnReg, btnSign;
+if(document.querySelector(".header_nav__signin") && document.querySelector(".header_nav__signup")) {
+    btnReg = document.querySelector(".header_nav__signin");
+    btnSign = document.querySelector(".header_nav__signup");
+}
 
 const signInBtn = document.querySelector(".signin_btn");
 const signUpBtn = document.querySelector(".signup_btn");
@@ -84,25 +87,27 @@ const showPopupSignInUp = () => {
 };
 
 const eventBtnPopup = () => {
-    btnReg.addEventListener("click", () => {
-        return (function () {
-            showPopupSignInUp();
-        })();
-    });
-    btnSign.addEventListener("click", () => {
-        return (function () {
-            setActiveBtn.removeActiveClass("signInBtn");
-            setActiveBtn.addActiveClass("signUpBtn");
-            selectorSignInUp.selectSignUp();
-            showPopupSignInUp();
-        })();
-    });
-    closePopup.addEventListener("click", () => {
-        return (function () {
-            setActiveBtn.removeActiveClass("signUpBtn");
-            setActiveBtn.addActiveClass("signInBtn");
-            popupSignInUp.style.display = "none";
-        })();
-    });
+    if(document.querySelector(".header_nav__signin") && document.querySelector(".header_nav__signup")) {
+        btnReg.addEventListener("click", () => {
+            return (function () {
+                showPopupSignInUp();
+            })();
+        });
+        btnSign.addEventListener("click", () => {
+            return (function () {
+                setActiveBtn.removeActiveClass("signInBtn");
+                setActiveBtn.addActiveClass("signUpBtn");
+                selectorSignInUp.selectSignUp();
+                showPopupSignInUp();
+            })();
+        });
+        closePopup.addEventListener("click", () => {
+            return (function () {
+                setActiveBtn.removeActiveClass("signUpBtn");
+                setActiveBtn.addActiveClass("signInBtn");
+                popupSignInUp.style.display = "none";
+            })();
+        });
+    }
 };
 eventBtnPopup();

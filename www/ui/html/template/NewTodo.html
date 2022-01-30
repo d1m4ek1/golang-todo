@@ -1,0 +1,31 @@
+<head><script defer src="../.././static/assets/main.46d2a47e0ea575759a24.js"></script></head>{{ define "popupNewToDo" }}
+<div class="popup popup_newtodo" style="display: none;">
+    <div class="popup_newtodo__block">
+        <div class="popup_newtodo__header">
+            <h2>New ToDo</h2>
+            <div class="popup_close"></div>
+        </div>
+        <div class="popup_newtodo__content">
+            <section id="popup_newtodo" class="popup_newtodo_section">
+                <form id="newtodo_form" action="/newtodo" method="get">
+                    <div class="popup_newtodo_inputs">
+                        <h4>Title</h4>
+                        <input id="newtodo_log" type="text" name="login" placeholder="Your title...">
+                    </div>
+                    <div class="popup_newtodo_inputs">
+                        <h4>Tag</h4>
+                        <input id="newtodo_pass" type="password" name="pass" placeholder="Your tag...">
+                    </div>
+                    <div class="popup_newtodo_inputs">
+                        <h4>ToDo</h4>
+                        <textarea id="newtodo_pass" type="password" name="pass" placeholder="Your todo..."></textarea>
+                    </div>
+                    <div class="popup_newtodo_inputs">
+                        <input id="newtodo_btn" class="btn" type="button" value="Sing In">
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+{{ end }}

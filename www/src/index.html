@@ -24,6 +24,7 @@
                             </div>
                             <div class="image active"></div>
                         </div>
+                        {{ if .UserLogin }}
                         <div class="header_nav__item">
                             <div class="header_nav__link">
                                 <a href="/todo"></a>
@@ -67,6 +68,12 @@
                             <div class="image"></div>
                         </div>
                         <div class="header_nav__item">
+                            <div class="header_nav__signout">
+                                <p>Sign Out</p>
+                            </div>
+                        </div>
+                        {{ else }}
+                        <div class="header_nav__item">
                             <div class="header_nav__signin">
                                 <p>Sign In</p>
                             </div>
@@ -76,6 +83,7 @@
                                 <p>Sign Up</p>
                             </div>
                         </div>
+                        {{ end }}
                     </nav>
                 </aside>
             </header>
@@ -83,7 +91,11 @@
             <main class="main">
                 <div class="main_content">
                     <div class="content_title">
-                        <h1>Home | NAME PROFILE</h1>
+                        {{ if .UserLogin}}
+                        <h1>Home | Hi! {{ .UserLogin }}</h1>
+                        {{ else }}
+                        <h1>Home | Developers</h1>
+                        {{ end }}
                     </div>
                     <div class="content">
                         <div class="content_block news">
@@ -146,7 +158,9 @@
                                         </p>
                                     </div>
                                     <div class="todo_rec__footer">
-                                        <a href="/todo?tag=hellohello">Подробнее...</a>
+                                        <a href="/todo?tag=hellohello"
+                                            >Подробнее...</a
+                                        >
                                     </div>
                                 </div>
                                 <div class="todo_rec">
@@ -181,7 +195,9 @@
                                         </p>
                                     </div>
                                     <div class="todo_rec__footer">
-                                        <a href="/todo?tag=lorer">Подробнее...</a>
+                                        <a href="/todo?tag=lorer"
+                                            >Подробнее...</a
+                                        >
                                     </div>
                                 </div>
                             </div>
