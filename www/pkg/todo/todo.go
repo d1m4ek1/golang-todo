@@ -69,20 +69,48 @@ func SetNewTodo(w http.ResponseWriter, r *http.Request) {
 	tag := r.URL.Query().Get("tag")
 	text := r.URL.Query().Get("text")
 
-	var lenUsersTG int
+	var idColumn int
 
-	len := database.QueryRow("SELECT COUNT(*) FROM users_todo")
-	err = len.Scan(&lenUsersTG)
+	database.QueryRow(`INSERT INTO users_todo (title, tag, text) VALUES ($1, $2, $3) RETURNING id;`,
+		title, tag, text).Scan(&idColumn)
+
+	_, err = database.Exec(`INSERT INTO users_todo_goals (users_id, users_todo_fk) VALUES ($1, $2)`, userId, idColumn)
+	if err != nil {
+		fmt.Println(NewError.GiveError(errorSetNewTodo, err))
+	}
+}
+
+func DeleteTodo(w http.ResponseWriter, r *http.Request) {
+	database, err := database.ConnectToDatabase()
 	if err != nil {
 		fmt.Println(NewError.GiveError(errorSetNewTodo, err))
 	}
 
-	_, err = database.Exec(`INSERT INTO users_todo (title, tag, text) VALUES ($1, $2, $3);`,
-		title, tag, text)
+	todoId := r.URL.Query().Get("todoId")
+
+	_, err = database.Exec("DELETE FROM users_todo_goals WHERE users_todo_fk=$1;", todoId)
 	if err != nil {
 		fmt.Println(NewError.GiveError(errorSetNewTodo, err))
 	}
-	_, err = database.Exec(`INSERT INTO users_todo_goals (users_id, users_todo_fk) VALUES ($1, $2)`, userId, fmt.Sprintf("%d", lenUsersTG+1))
+
+	_, err = database.Exec("DELETE FROM users_todo WHERE id=$1;", todoId)
+	if err != nil {
+		fmt.Println(NewError.GiveError(errorSetNewTodo, err))
+	}
+}
+
+func EditTodo(w http.ResponseWriter, r *http.Request) {
+	database, err := database.ConnectToDatabase()
+	if err != nil {
+		fmt.Println(NewError.GiveError(errorSetNewTodo, err))
+	}
+
+	todoId := r.URL.Query().Get("todoId")
+	title := r.URL.Query().Get("title")
+	tag := r.URL.Query().Get("tag")
+	text := r.URL.Query().Get("text")
+
+	_, err = database.Exec("UPDATE users_todo SET title=$1, tag=$2, text=$3 WHERE id=$4", title, tag, text, todoId)
 	if err != nil {
 		fmt.Println(NewError.GiveError(errorSetNewTodo, err))
 	}

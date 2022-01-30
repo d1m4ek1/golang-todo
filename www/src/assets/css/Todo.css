@@ -28,6 +28,12 @@
 .todo_rec__title {
     padding-bottom: 10px;
 }
+.todo_rec__content {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+}
 .todo_rec__content p {
     padding: 2px 0;
 }
@@ -39,10 +45,14 @@
     display: flex;
     justify-content: space-between;
 }
-.todo_rec__footer p, .todo_rec__footer a {
-    text-decoration: underline;
+.todo_rec__footer p,
+.todo_rec__footer a {
     cursor: pointer;
     padding: 0 5px;
+}
+.todo_rec__footer p:hover,
+.todo_rec__footer a:hover {
+    text-decoration: underline;
 }
 .todo_rec__footer p:nth-child(1) {
     color: royalblue;

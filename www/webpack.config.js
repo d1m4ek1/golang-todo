@@ -59,6 +59,14 @@ module.exports = {
             filename: "./html/template/NewTodo.html",
             template: "./src/html/popups/NewTodo.html"
         }),
+        new HtmlWebpackPlugin({
+            filename: "./html/template/DeleteTodo.html",
+            template: "./src/html/popups/DeleteTodo.html"
+        }),
+        new HtmlWebpackPlugin({
+            filename: "./html/template/EditTodo.html",
+            template: "./src/html/popups/EditTodo.html"
+        }),
         // new FaviconsWebpackPlugin({
         //     logo: './src/images/header/logo.png',
         //     prefix: "./static/images/"

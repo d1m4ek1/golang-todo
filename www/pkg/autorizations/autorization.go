@@ -37,12 +37,14 @@ var AutorizedUserInfo autorizedUser
 var (
 	errorSigninUser    string = pathToError + "signinUser"
 	errorUserAutorized string = pathToError + "UserAutorized"
+	errorSignUpUser    string = pathToError + "SignUpUser"
 )
 
 // SQL QUERYS
 var (
 	sqlQuerySigninInUser  string = "SELECT id, login, password FROM users WHERE login=$1 AND password=$2"
 	sqlQueryUserAutorized string = "SELECT login FROM users u WHERE u.login=$1 AND u.password=$2"
+	sqlQueryCountColumn   string = "SELECT COUNT(*) FROM users"
 )
 
 func UserAutorized(token, log, pass string) {
@@ -65,7 +67,7 @@ func UserAutorized(token, log, pass string) {
 	}
 }
 
-func SigninInUser(w http.ResponseWriter, r *http.Request) {
+func SignInUser(w http.ResponseWriter, r *http.Request) {
 	database, err := database.ConnectToDatabase()
 	if err != nil {
 		fmt.Println(NewError.GiveError(errorSigninUser, err))
@@ -108,6 +110,60 @@ func SigninInUser(w http.ResponseWriter, r *http.Request) {
 		AutorizedUserInfo.Login = login
 
 		j = ResponseSignIn{
+			IdUsers:   userSignIn.Id,
+			Login:     userSignIn.Login,
+			Password:  userSignIn.Password,
+			Completed: true,
+			Err:       "",
+		}
+
+		encoder := json.NewEncoder(w)
+		err = encoder.Encode(&j)
+		if err != nil {
+			fmt.Println(NewError.GiveError(errorSigninUser, err))
+		}
+	}
+}
+
+func SignUpUser(w http.ResponseWriter, r *http.Request) {
+	database, err := database.ConnectToDatabase()
+	if err != nil {
+		fmt.Println(NewError.GiveError(errorSignUpUser, err))
+		return
+	}
+
+	login := r.URL.Query().Get("login")
+	password := r.URL.Query().Get("passConf")
+
+	var lenUsersTG int
+	len := database.QueryRow(sqlQueryCountColumn)
+	err = len.Scan(&lenUsersTG)
+	if err != nil {
+		fmt.Println(NewError.GiveError(errorSignUpUser, err))
+	}
+
+	_, err = database.Exec("INSERT INTO users (login, password) VALUES ($1, $2)", login, password)
+	if err != nil {
+		j := ResponseSignIn{
+			IdUsers:   0,
+			Login:     "",
+			Password:  "",
+			Completed: false,
+			Err:       "Возможно логин указанный выше уже занят, попробуйте еще раз",
+		}
+
+		encoder := json.NewEncoder(w)
+		err = encoder.Encode(&j)
+		if err != nil {
+			fmt.Println(NewError.GiveError(errorSigninUser, err))
+		}
+	} else {
+
+		userSignIn := UserSignIn{}
+		result := database.QueryRow("SELECT id, login, password FROM users WHERE login=$1 AND password=$2;", login, password)
+		err = result.Scan(&userSignIn.Id, &userSignIn.Login, &userSignIn.Password)
+
+		j := ResponseSignIn{
 			IdUsers:   userSignIn.Id,
 			Login:     userSignIn.Login,
 			Password:  userSignIn.Password,

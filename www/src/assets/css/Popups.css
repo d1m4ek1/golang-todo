@@ -9,13 +9,37 @@
     justify-content: center;
     align-items: center;
 }
+.hide_popup {
+    animation-name: hidePopup;
+    animation-duration: .3s;
+}
+@keyframes hidePopup {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(.8);
+    }
+}
 .popup::before {
-    content: '';
+    content: "";
     position: absolute;
     z-index: -1;
-    background-color: rgba(0, 0, 0, .4);
+    background-color: rgba(0, 0, 0, 0.4);
     width: 100%;
     height: 100%;
+    animation-name: showBg;
+    animation-duration: .3s;
+}
+@keyframes showBg {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 .popup_close {
     position: absolute;
@@ -30,8 +54,9 @@
     border-radius: 50%;
     cursor: pointer;
 }
-.popup_close::after, .popup_close::before {
-    content: '';
+.popup_close::after,
+.popup_close::before {
+    content: "";
     position: absolute;
     width: 100%;
     height: 2px;
@@ -44,24 +69,45 @@
     transform: rotate(-45deg);
 }
 .popup_siginup__block,
-.popup_newtodo__block {
+.popup_newtodo__block,
+.popup_todoDelete__block,
+.popup_edittodo__block {
     background-color: white;
     padding: 20px;
     margin: 10px;
     overflow: hidden;
+    animation-name: showPopup;
+    animation-duration: .3s;
+}
+@keyframes showPopup {
+    from {
+        opacity: 0;
+        transform: scale(.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 .popup_siginup__block {
     max-width: 500px;
     width: 100%;
     height: 350px;
 }
-.popup_newtodo__block {
+.popup_newtodo__block, .popup_edittodo__block {
     max-width: 800px;
     width: 100%;
     height: 450px;
 }
+.popup_todoDelete__block {
+    max-width: 350px;
+    width: 100%;
+    height: 200px;
+}
 .popup_siginup__header,
-.popup_newtodo__header {
+.popup_newtodo__header,
+.popup_todoDelete__header,
+.popup_edittodo__header {
     position: relative;
     display: flex;
     justify-content: center;
@@ -76,12 +122,13 @@
 .active_sign {
     color: black !important;
     padding: 0 10px;
-    transition: .3s;
+    transition: 0.3s;
 }
 .popup_signinup_section {
-    transition: .3s;
+    transition: 0.3s;
 }
-.error_signin {
+.error_signin,
+.error_signup {
     color: rgb(255, 0, 0);
     padding-bottom: 5px;
 }
@@ -93,7 +140,18 @@
     align-items: center;
     height: 80%;
 }
-.popup_newtodo__content {
+.popup_todoDelete_content {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+    height: 80%;
+}
+.popup_todoDelete_content p {
+    text-align: center;
+}
+.popup_newtodo__content
+.popup_edittodo__content {
     position: relative;
     width: 100%;
     height: 100%;
@@ -124,7 +182,7 @@
     width: 100%;
     height: 30px;
 }
-.popup_signinup_section form input:not([type="submit"]){
+.popup_signinup_section form input:not([type="submit"]) {
     background-color: rgb(224, 224, 224);
     outline: none;
     border: none;
@@ -135,20 +193,31 @@
 .popup_signinup_section form input:focus:not([type="submit"]) {
     box-shadow: 0 0 0 3px rgb(207, 207, 207);
 }
-.popup_signin_inputs {
+.popup_signupin_inputs {
     width: 70%;
 }
-.popup_signinup_section form .popup_signin_inputs:not(:last-child) {
+.popup_signinup_section form .popup_signupin_inputs:not(:last-child) {
     padding-bottom: 10px;
 }
 
-
-.popup_newtodo_inputs {
+.popup_newtodo_inputs, .popup_edittodo_inputs {
     padding-bottom: 20px;
 }
-.popup_newtodo_inputs input, .popup_newtodo_inputs textarea {
+.popup_newtodo_inputs input,
+.popup_newtodo_inputs textarea,
+.popup_edittodo_inputs input,
+.popup_edittodo_inputs textarea {
     width: 100%;
     max-width: 100%;
     min-width: 100%;
     max-height: 180px;
+}
+.popup_todoDelete_section {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+.popup_todoDelete_section .btn {
+    width: 45%;
+    height: 40px;
 }

@@ -7,7 +7,7 @@
         <title>MyToDO</title>
         <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script defer src="../.././static/assets/main.ff6b4a756aa2d7f19de6.js"></script></head>
+    <script defer src="../.././static/assets/main.3f682ea9a208252f5f7c.js"></script></head>
     <body>
         <div class="wrapper">
             <header class="header">
@@ -132,8 +132,8 @@
                                     </div>
                                     <div class="todo_rec__footer">
                                         <p>Подробнее...</p>
-                                        <p>Редактировать</p>
-                                        <p>Удалить</p>
+                                        <p class="show_edit_todo">Редактировать</p>
+                                        <p class="show_delete_todo">Удалить</p>
                                     </div>
                                 </div>
                                 {{ end }}
@@ -144,6 +144,8 @@
             </main>
             {{ template "popupSignInUp" }} 
             {{ template "popupNewToDo" }}
+            {{ template "popupEditToDo" }}
+            {{ template "popupDeleteTodo" }}
         </div>
     </body>
 </html>

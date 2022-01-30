@@ -132,8 +132,8 @@
                                     </div>
                                     <div class="todo_rec__footer">
                                         <p>Подробнее...</p>
-                                        <p>Редактировать</p>
-                                        <p>Удалить</p>
+                                        <p class="show_edit_todo">Редактировать</p>
+                                        <p class="show_delete_todo">Удалить</p>
                                     </div>
                                 </div>
                                 {{ end }}
@@ -144,6 +144,8 @@
             </main>
             {{ template "popupSignInUp" }} 
             {{ template "popupNewToDo" }}
+            {{ template "popupEditToDo" }}
+            {{ template "popupDeleteTodo" }}
         </div>
     </body>
 </html>

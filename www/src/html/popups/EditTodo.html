@@ -1,0 +1,32 @@
+{{ define "popupEditToDo" }}
+<div class="popup popup_edittodo" style="display: none;">
+    <div class="popup_edittodo__block">
+        <div class="popup_edittodo__header">
+            <h2>Редактировать ToDo</h2>
+            <div class="popup_close"></div>
+        </div>
+        <div class="popup_edittodo__content">
+            <section id="popup_edittodo" class="popup_edittodo_section">
+                <form id="edittodo_form" action="/edittodo" method="get">
+                    <div class="popup_edittodo_inputs">
+                        <h4>Заголовок</h4>
+                        <input class="input" id="edittodo_title" type="text" name="title" placeholder="Заголовок...">
+                    </div>
+                    <div class="popup_edittodo_inputs">
+                        <h4>Тег</h4>
+                        <input class="input" id="edittodo_tag" type="text" name="tag" placeholder="Тег...">
+                    </div>
+                    <div class="popup_edittodo_inputs">
+                        <h4>ToDo-Запись</h4>
+                        <textarea class="textarea" id="edittodo_todo" type="text" name="todo" placeholder="ToDo..."></textarea>
+                    </div>
+                    <p class="error_signin" style="display: none;">title or tag too long</p>
+                    <div class="popup_edittodo_inputs">
+                        <input id="edittodo_btn" class="btn" type="button" value="Редактировать">
+                    </div>
+                </form>
+            </section>
+        </div>
+    </div>
+</div>
+{{ end }}
