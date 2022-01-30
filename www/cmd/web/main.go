@@ -68,6 +68,8 @@ func handleFunc() {
 	rtr.HandleFunc("/user_signin", autorizations.SigninInUser)
 	rtr.HandleFunc("/user_signout", autorizations.UserSignOut)
 
+	rtr.HandleFunc("/create_newtodo", todo.SetNewTodo)
+
 	http.Handle("/", rtr)
 	http.Handle("/static/assets/", http.StripPrefix("/static/assets/", http.FileServer(http.Dir("./ui/static/assets/"))))
 

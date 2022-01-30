@@ -1,5 +1,5 @@
 {{ define "popupNewToDo" }}
-<div class="popup popup_newtodo">
+<div class="popup popup_newtodo" style="display: none;">
     <div class="popup_newtodo__block">
         <div class="popup_newtodo__header">
             <h2>New ToDo</h2>
@@ -10,16 +10,17 @@
                 <form id="newtodo_form" action="/newtodo" method="get">
                     <div class="popup_newtodo_inputs">
                         <h4>Title</h4>
-                        <input id="newtodo_log" type="text" name="login" placeholder="Your title...">
+                        <input class="input" id="newtodo_title" type="text" name="title" placeholder="Your title...">
                     </div>
                     <div class="popup_newtodo_inputs">
                         <h4>Tag</h4>
-                        <input id="newtodo_pass" type="password" name="pass" placeholder="Your tag...">
+                        <input class="input" id="newtodo_tag" type="text" name="tag" placeholder="Your tag...">
                     </div>
                     <div class="popup_newtodo_inputs">
                         <h4>ToDo</h4>
-                        <textarea id="newtodo_pass" type="password" name="pass" placeholder="Your todo..."></textarea>
+                        <textarea class="textarea" id="newtodo_todo" type="text" name="todo" placeholder="Your todo..."></textarea>
                     </div>
+                    <p class="error_signin" style="display: none;">title or tag too long</p>
                     <div class="popup_newtodo_inputs">
                         <input id="newtodo_btn" class="btn" type="button" value="Sing In">
                     </div>

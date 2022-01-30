@@ -9,11 +9,10 @@ if(document.querySelector(".header_nav__signin") && document.querySelector(".hea
 
 const signInBtn = document.querySelector(".signin_btn");
 const signUpBtn = document.querySelector(".signup_btn");
+const closePopup = document.querySelectorAll(".popup_close");
 
 const signInSelector = document.querySelector("#popup_signin");
 const signUpSelector = document.querySelector("#popup_signup");
-
-const closePopup = document.querySelector(".popup_close");
 
 class SetActiveBtn {
     constructor(signIn, signUp) {
@@ -86,6 +85,24 @@ const showPopupSignInUp = () => {
     });
 };
 
+if(document.querySelector(".popup.popup_newtodo")) {
+    let btnShowPopup = document.querySelector(".btn.new_todo_btn");
+    let popupNewTodo = document.querySelector(".popup.popup_newtodo");
+
+    btnShowPopup.addEventListener("click", () => {
+        return function() {
+            popupNewTodo.style.display = null
+        }()
+    })
+    closePopup.forEach(item => {
+        item.addEventListener("click", () => {
+            return function() {
+                popupNewTodo.style.display = "none"
+            }()
+        })
+    })
+}
+
 const eventBtnPopup = () => {
     if(document.querySelector(".header_nav__signin") && document.querySelector(".header_nav__signup")) {
         btnReg.addEventListener("click", () => {
@@ -101,6 +118,7 @@ const eventBtnPopup = () => {
                 showPopupSignInUp();
             })();
         });
+        const closePopup = document.querySelector(".popup_close");
         closePopup.addEventListener("click", () => {
             return (function () {
                 setActiveBtn.removeActiveClass("signUpBtn");

@@ -6,13 +6,11 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing:border-box;
 }
 
 body {
     font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
     background-color: rgb(159, 236, 255);
 }
 
@@ -43,4 +41,15 @@ p, a {
 }
 .input:focus, .btn:hover {
     box-shadow: 0 0 0 4px rgb(226, 226, 226);
+}
+.textarea {
+    outline: none;
+    border: none;
+    background-color: rgb(240, 240, 240);
+    border-radius: 10px;
+    font-size: 15px;
+    min-height: 30px;
+    min-width: 100px;
+    padding-left: 10px;
+    padding-top: 5px;
 }
