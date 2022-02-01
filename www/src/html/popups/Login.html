@@ -1,47 +1,47 @@
 {{ define "popupSignInUp" }}
 <div class="popup popup_sign" style="display: none;">
-    <div class="popup_siginup__block">
-        <div class="popup_siginup__header">
-            <h2 class="active_sign signin_btn">Sign In</h2>
+    <div class="popup_block">
+        <div class="popup_header">
+            <h2 class="signin_btn active_popup_btn">Sign In</h2>
             <h2>/</h2>
             <h2 class="signup_btn">Sign Up</h2>
             <div class="popup_close"></div>
         </div>
-        <div class="popup_siginup_content">
-            <section id="popup_signin" class="popup_signinup_section popup_signinup_left">
+        <div class="popup_content">
+            <section id="popup_signin" class="section_signinup popup_section_left">
                 <h2>My Tasks</h2>
                 <form id="signin_form" action="/signin" method="get">
-                    <div class="popup_signupin_inputs">
+                    <div class="popup_inputs">
                         <h4>Login</h4>
                         <input id="signin_log" type="text" name="login" placeholder="Your login...">
                     </div>
-                    <div class="popup_signupin_inputs">
+                    <div class="popup_inputs">
                         <h4>Password</h4>
                         <input id="signin_pass" type="password" name="pass" placeholder="Your password...">
                     </div>
                     <p class="error_signin" style="display: none;"></p>
-                    <div class="popup_signupin_inputs">
+                    <div class="popup_inputs">
                         <input id="signin_btn" class="btn" type="button" value="Sing In">
                     </div>
                 </form>
             </section>
-            <section id="popup_signup" class="popup_signinup_section popup_signinup_right">
+            <section id="popup_signup" class="section_signinup popup_section_right">
                 <h2>My Tasks</h2>
                 <form action="/signup" method="post">
-                    <div class="popup_signupin_inputs">
+                    <div class="popup_inputs">
                         <h4>Login</h4>
                         <input id="signup_log" type="text" placeholder="Enter your login...">
                     </div>
-                    <div class="popup_signupin_inputs">
+                    <div class="popup_inputs">
                         <h4>Password</h4>
                         <input id="signup_pass" type="password" placeholder="Enter your password...">
                     </div>
-                    <div class="popup_signupin_inputs">
+                    <div class="popup_inputs">
                         <h4>Confirm password</h4>
                         <input id="signup_pass_conf" type="password" placeholder="Enter your password...">
                     </div>
                     <p class="error_signup" style="display: none;"></p>
-                    <div class="popup_signupin_inputs">
+                    <div class="popup_inputs">
                         <input id="signup_btn" class="btn" type="button" value="Sing Up">
                     </div>
                 </form>

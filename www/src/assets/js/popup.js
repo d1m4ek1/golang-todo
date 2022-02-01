@@ -1,61 +1,93 @@
 import MD5 from "crypto-js/md5";
 
 const mainBlock = document.querySelector(".main");
-const popupSignInUp = document.querySelector(".popup_sign");
 
-let btnReg, btnSign;
-if (
-    document.querySelector(".header_nav__signin") &&
-    document.querySelector(".header_nav__signup")
-) {
-    btnReg = document.querySelector(".header_nav__signin");
-    btnSign = document.querySelector(".header_nav__signup");
+
+const popupData = {
+    popupSignInUp: {
+        isPopup: null,
+        btnReg: null,
+        btnSign: null,
+        signInBtn: null,
+        signUpBtn: null,
+        popupSelectors: {
+            leftSelector: null,
+            rightSelector: null,
+        },
+    },
+    popupContact: {
+        isPopup: null,
+        contactBtn: [],
+        messBtn: null,
+        addressBtn: null,
+        popupSelectors: {
+            leftSelector: null,
+            rightSelector: null,
+        },
+    },
+    closePopup: document.querySelectorAll(".popup-close"),
+};
+
+class SetPopup {
+    constructor(option) {
+        this.$pp = option;
+    }
+
+    setSignInUp() {
+        this.$pp.popupSignInUp.btnReg = document.querySelector(".header_nav__signin");
+        this.$pp.popupSignInUp.btnSign =
+            document.querySelector(".header_nav__signup");
+
+        this.$pp.popupSignInUp.isPopup = document.querySelector(".popup_sign");
+        this.$pp.popupSignInUp.signInBtn =
+            document.querySelector(".signin_btn");
+        this.$pp.popupSignInUp.signUpBtn =
+            document.querySelector(".signup_btn");
+
+        this.$pp.popupSignInUp.popupSelectors.leftSelector =
+            document.querySelector(".section_signinup.popup_section_left");
+        this.$pp.popupSignInUp.popupSelectors.rightSelector =
+            document.querySelector(".section_signinup.popup_section_right");
+    }
 }
 
-const signInBtn = document.querySelector(".signin_btn");
-const signUpBtn = document.querySelector(".signup_btn");
-const closePopup = document.querySelectorAll(".popup_close");
-
-const signInSelector = document.querySelector("#popup_signin");
-const signUpSelector = document.querySelector("#popup_signup");
-
 class SetActiveBtn {
-    constructor(signIn, signUp) {
-        this.$in = signIn;
-        this.$up = signUp;
+    constructor(leftBtn, rightBtn) {
+        this.$lt = leftBtn;
+        this.$rt = rightBtn;
     }
 
     removeActiveClass(key) {
         switch (key) {
-            case "signInBtn":
-                this.$in.classList.remove("active_sign");
+            case "left":
+                this.$in.classList.remove("active_popup_btn");
                 break;
-            case "signUpBtn":
-                this.$up.classList.remove("active_sign");
+            case "right":
+                this.$up.classList.remove("active_popup_btn");
                 break;
         }
     }
 
     addActiveClass(key) {
         switch (key) {
-            case "signInBtn":
-                this.$in.classList.add("active_sign");
+            case "left":
+                this.$in.classList.add("active_popup_btn");
                 break;
-            case "signUpBtn":
-                this.$up.classList.add("active_sign");
+            case "right":
+                this.$up.classList.add("active_popup_btn");
                 break;
         }
     }
 }
 
-class SelectorSignInUp {
-    constructor(signIn, signUp) {
-        this.$in = signIn;
-        this.$up = signUp;
+class SelectorPopupSection {
+    constructor(leftBtn, rightBtn) {
+        this.$lt = leftBtn;
+        this.$rt = rightBtn;
     }
 
     selectSignUp() {
-        this.$in.style.left = "-520px";
+        this.$in.style.left = "-100%";
         this.$up.style.right = "0";
     }
     selectSignIn() {
@@ -105,63 +137,71 @@ class TemplatesPopup {
     }
 }
 
-const setActiveBtn = new SetActiveBtn(signInBtn, signUpBtn);
-const selectorSignInUp = new SelectorSignInUp(signInSelector, signUpSelector);
+const showPopupSignInUp = (setActiveBtn, selectorPopupSection) => {
+    popupData.popupSignInUp.isPopup.style.display = null;
 
-const showPopupSignInUp = () => {
-    popupSignInUp.style.display = null;
-
-    signUpBtn.addEventListener("click", () => {
+    popupData.popupSignInUp.signInBtn.addEventListener("click", () => {
         return (function () {
-            if (!signUpBtn.classList.contains("active_sign")) {
-                setActiveBtn.removeActiveClass("signInBtn");
-                setActiveBtn.addActiveClass("signUpBtn");
-                selectorSignInUp.selectSignUp();
+            if (
+                !popupData.popupSignInUp.signInBtn.classList.contains(
+                    "active_popup_btn"
+                )
+            ) {
+                setActiveBtn.removeActiveClass("right");
+                setActiveBtn.addActiveClass("left");
+                selectorPopupSection.selectRight();
             }
         })();
     });
-    signInBtn.addEventListener("click", () => {
+    popupData.popupSignInUp.signUpBtn.addEventListener("click", () => {
         return (function () {
-            if (!signInBtn.classList.contains("active_sign")) {
-                setActiveBtn.removeActiveClass("signUpBtn");
-                setActiveBtn.addActiveClass("signInBtn");
-                selectorSignInUp.selectSignIn();
+            if (
+                !popupData.popupSignInUp.signUpBtn.classList.contains(
+                    "active_popup_btn"
+                )
+            ) {
+                setActiveBtn.removeActiveClass("left");
+                setActiveBtn.addActiveClass("right");
+                selectorPopupSection.selectLeft();
             }
         })();
     });
 };
 
 const eventBtnPopup = () => {
-    if (
-        document.querySelector(".header_nav__signin") &&
-        document.querySelector(".header_nav__signup")
-    ) {
-        btnReg.addEventListener("click", () => {
+
+    const setActiveBtn = new SetActiveBtn(
+        popupData.popupSignInUp.signInBtn,
+        popupData.popupSignInUp.signUpBtn
+    );
+    const selectorPopupSection = new SelectorPopupSection(
+        popupData.popupSignInUp.popupSelectors.leftSelector,
+        popupData.popupSignInUp.popupSelectors.rightSelector
+    );
+
+    popupData.popupSignInUp.btnReg.addEventListener("click", () => {
+        return (function () {
+            showPopupSignInUp(setActiveBtn, selectorPopupSection);
+        })();
+    });
+    popupData.popupSignInUp.btnSign.addEventListener("click", () => {
+        return (function () {
+            setActiveBtn.removeActiveClass("left");
+            setActiveBtn.addActiveClass("right");
+            selectorPopupSection.selectLeft();
+            showPopupSignInUp(setActiveBtn, selectorPopupSection);
+        })();
+    });
+    popupData.closePopup.forEach((item) => {
+        item.addEventListener("click", () => {
             return (function () {
-                showPopupSignInUp();
+                setActiveBtn.removeActiveClass("right");
+                setActiveBtn.addActiveClass("left");
+                selectorPopupSection.selectRight();
+                popupData.popupSignInUp.isPopup.style.display = "none";
             })();
         });
-        btnSign.addEventListener("click", () => {
-            return (function () {
-                setActiveBtn.removeActiveClass("signInBtn");
-                setActiveBtn.addActiveClass("signUpBtn");
-                selectorSignInUp.selectSignUp();
-                showPopupSignInUp();
-            })();
-        });
-        const closePopup = document.querySelector(".popup_close");
-        closePopup.addEventListener("click", () => {
-            return (function () {
-                popupSignInUp.classList.add("hide_popup");
-                setTimeout(() => {
-                    setActiveBtn.removeActiveClass("signUpBtn");
-                    setActiveBtn.addActiveClass("signInBtn");
-                    popupSignInUp.style.display = "none";
-                    popupSignInUp.classList.remove("hide_popup");
-                }, 290);
-            })();
-        });
-    }
+    });
 };
 eventBtnPopup();
 
@@ -211,6 +251,11 @@ const showEditTodo = () => {
     }
 };
 showEditTodo();
+
+if (document.querySelector(".popup.popup-sign")) {
+    const setPopup = new SetPopup(popupData);
+    setPopup.setSignInUp(), eventBtnPopupSignInUp();
+}
 
 // AJAX
 // AJAX

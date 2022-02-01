@@ -1,0 +1,25 @@
+{{ define "popupMoreTodo" }}
+<div class="popup popup_moretodo" style="display: none;">
+    <div class="popup_block">
+        <div class="popup_header">
+            <h2>Подробнее о записи</h2>
+            <div class="popup_close"></div>
+        </div>
+        <div class="popup_content">
+            <section id="popup_moretodo" class="section_moretodo popup_section">
+                <div class="more_info">
+                    <div class="popup_inputs">
+                        <h4>Заголовок | {{ .Title }}</h4>
+                    </div>
+                    <div class="popup_inputs">
+                        <h4>Тэг | @{{ .Tag }}</h4>
+                    </div>
+                    <div class="popup_inputs">
+                        <p>{{ .Text }}</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{{ end }}

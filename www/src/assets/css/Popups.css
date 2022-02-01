@@ -11,7 +11,7 @@
 }
 .hide_popup {
     animation-name: hidePopup;
-    animation-duration: .3s;
+    animation-duration: 0.3s;
 }
 @keyframes hidePopup {
     from {
@@ -20,7 +20,7 @@
     }
     to {
         opacity: 0;
-        transform: scale(.8);
+        transform: scale(0.8);
     }
 }
 .popup::before {
@@ -31,7 +31,7 @@
     width: 100%;
     height: 100%;
     animation-name: showBg;
-    animation-duration: .3s;
+    animation-duration: 0.3s;
 }
 @keyframes showBg {
     from {
@@ -68,63 +68,60 @@
 .popup_close::before {
     transform: rotate(-45deg);
 }
-.popup_siginup__block,
-.popup_newtodo__block,
-.popup_todoDelete__block,
-.popup_edittodo__block {
+.popup_block {
     background-color: white;
     padding: 20px;
     margin: 10px;
     overflow: hidden;
     animation-name: showPopup;
-    animation-duration: .3s;
+    animation-duration: 0.3s;
+    width: 100%;
 }
 @keyframes showPopup {
     from {
         opacity: 0;
-        transform: scale(.8);
+        transform: scale(0.8);
     }
     to {
         opacity: 1;
         transform: scale(1);
     }
 }
-.popup_siginup__block {
+.popup_sign .popup_block {
     max-width: 500px;
-    width: 100%;
     height: 350px;
 }
-.popup_newtodo__block, .popup_edittodo__block {
+.popup_edittodo .popup_block,
+.popup_newtodo .popup_block {
     max-width: 800px;
-    width: 100%;
     height: 450px;
 }
-.popup_todoDelete__block {
+.popup_moretodo .popup_block {
+    max-width: 800px;
+    height: 450px;
+}
+.popup_todoDelete .popup_block {
     max-width: 350px;
-    width: 100%;
     height: 200px;
 }
-.popup_siginup__header,
-.popup_newtodo__header,
-.popup_todoDelete__header,
-.popup_edittodo__header {
+.popup__header {
     position: relative;
     display: flex;
     justify-content: center;
 }
-.popup_siginup__header h2:nth-child(odd) {
+.popup_header h2:nth-child(odd) {
     cursor: pointer;
     margin: 0 5px;
 }
-.popup_siginup__header h2 {
+.popup_header h2 {
     color: rgb(150, 150, 150);
 }
-.active_sign {
+.active_popup_btn {
     color: black !important;
     padding: 0 10px;
     transition: 0.3s;
 }
-.popup_signinup_section {
+.popup_section {
     transition: 0.3s;
 }
 .error_signin,
@@ -132,7 +129,7 @@
     color: rgb(255, 0, 0);
     padding-bottom: 5px;
 }
-.popup_siginup_content {
+.popup_content {
     position: relative;
     width: 100%;
     display: flex;
@@ -140,49 +137,50 @@
     align-items: center;
     height: 80%;
 }
-.popup_todoDelete_content {
+.popup_todoDelete .popup_content {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
     flex-direction: column;
     height: 80%;
 }
-.popup_todoDelete_content p {
+.popup_todoDelete .popup_content p {
     text-align: center;
 }
-.popup_newtodo__content
-.popup_edittodo__content {
+.popup_edittodo .popup_block,
+.popup_newtodo .popup_block {
     position: relative;
     width: 100%;
     height: 100%;
 }
-.popup_signinup_left {
+
+.popup_section_left {
     left: 0;
 }
-.popup_signinup_right {
-    right: -520px;
+.popup_section_right {
+    right: -100%;
 }
-.popup_signinup_section {
+.popup_section {
     position: absolute;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.popup_signinup_section h2 {
+.popup_section h2 {
     text-align: center;
 }
-.popup_signinup_section form {
+.popup_section form {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.popup_signinup_section form input {
+.popup_section form input {
     width: 100%;
     height: 30px;
 }
-.popup_signinup_section form input:not([type="submit"]) {
+.popup_section form input:not([type="submit"]) {
     background-color: rgb(224, 224, 224);
     outline: none;
     border: none;
@@ -190,34 +188,34 @@
     padding-left: 5px;
     font-size: 16px;
 }
-.popup_signinup_section form input:focus:not([type="submit"]) {
+.popup_section form input:focus:not([type="submit"]) {
     box-shadow: 0 0 0 3px rgb(207, 207, 207);
 }
-.popup_signupin_inputs {
+.popup_inputs {
     width: 70%;
 }
-.popup_signinup_section form .popup_signupin_inputs:not(:last-child) {
+.popup_section form .popup_inputs:not(:last-child) {
     padding-bottom: 10px;
 }
-
-.popup_newtodo_inputs, .popup_edittodo_inputs {
+.popup_edittodo .popup_inputs,
+.popup_newtodo .popup_inputs {
     padding-bottom: 20px;
 }
-.popup_newtodo_inputs input,
-.popup_newtodo_inputs textarea,
-.popup_edittodo_inputs input,
-.popup_edittodo_inputs textarea {
+.popup_edittodo .popup_inputs input,
+.popup_edittodo .popup_inputs textarea,
+.popup_newtodo .popup_inputs input,
+.popup_newtodo .popup_inputs textarea{
     width: 100%;
     max-width: 100%;
     min-width: 100%;
     max-height: 180px;
 }
-.popup_todoDelete_section {
+.section_deletetodo {
     width: 100%;
     display: flex;
     justify-content: space-evenly;
 }
-.popup_todoDelete_section .btn {
+.section_deletetodo .btn {
     width: 45%;
     height: 40px;
 }
