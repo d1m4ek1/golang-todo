@@ -131,7 +131,7 @@
                                         <p>{{ .Text }}</p>
                                     </div>
                                     <div class="todo_rec__footer">
-                                        <p>Подробнее...</p>
+                                        <p class="show_more_todo">Подробнее...</p>
                                         <p class="show_edit_todo">Редактировать</p>
                                         <p class="show_delete_todo">Удалить</p>
                                     </div>
@@ -146,6 +146,7 @@
             {{ template "popupNewToDo" }}
             {{ template "popupEditToDo" }}
             {{ template "popupDeleteTodo" }}
+            {{ template "popupMoreTodo" }}
         </div>
     </body>
 </html>

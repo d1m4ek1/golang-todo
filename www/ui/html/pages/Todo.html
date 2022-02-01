@@ -1,1 +1,153 @@
-{{ define "todo" }}<!doctype html><html><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>MyToDO</title><meta name="description" content=""/><meta name="viewport" content="width=device-width,initial-scale=1"/><script defer="defer" src="../.././static/assets/main.3480d272df18adf8035d.js"></script></head><body><div class="wrapper"><header class="header"><aside class="header_aside"><div class="header_title"><h1>My utils</h1><div class="burger"></div></div><nav class="header_nav"><div class="header_nav__item"><div class="header_nav__link"><a href="/"></a><p>Home</p></div><div class="image"></div></div><div class="header_nav__item"><div class="header_nav__link"><a href="/todo"></a><p>ToDo</p></div><div class="image active"></div></div><div class="header_nav__item"><div class="header_nav__link"><a href=""></a><p>Goals</p></div><div class="image"></div></div><div class="header_nav__item"><div class="header_nav__link"><a href=""></a><p>Plans</p></div><div class="image"></div></div><div class="header_nav__item"><div class="header_nav__link"><a href=""></a><p>Tasks</p></div><div class="image"></div></div><div class="header_nav__item"><div class="header_nav__link"><a href=""></a><p>Saved links</p></div><div class="image"></div></div><div class="header_nav__item"><div class="header_nav__link"><a href=""></a><p>Options</p></div><div class="image"></div></div>{{ if .UserLogin }}<div class="header_nav__item"><div class="header_nav__signout"><p>Sign Out</p></div></div>{{ else }}<div class="header_nav__item"><div class="header_nav__signin"><p>Sign In</p></div></div><div class="header_nav__item"><div class="header_nav__signup"><p>Sign Up</p></div></div>{{ end }}</nav></aside></header><div class="header_background"></div><main class="main"><div class="main_content"><div class="content_title">{{ if .UserLogin}}<h1>TODO | Hi! {{ .UserLogin }}</h1>{{ else }}<h1>TODO | Developers</h1>{{ end }}</div><div class="content"><div class="content_block create"><div class="search_todo"><h2>Search todo for tag</h2><div class="search_todo__inputs"><input class="input search_todo_inp" placeholder="Tag todo..."/> <button class="btn search_todo_btn">Search</button></div></div><div class="new_todo"><button class="btn new_todo_btn">New ToDo</button></div></div><div class="content_block user"><h2>My ToDo-Recording</h2><div class="content_block__items user">{{ range .UserTodo }}<div id="todo_{{ .IdTodo }}" class="todo_rec"><div class="todo_rec__title"><h2>{{ .Title }}</h2><h3>Tag: @{{ .Tag }}</h3></div><div class="todo_rec__content"><p>{{ .Text }}</p></div><div class="todo_rec__footer"><p>Подробнее...</p><p class="show_edit_todo">Редактировать</p><p class="show_delete_todo">Удалить</p></div></div>{{ end }}</div></div></div></div></main>{{ template "popupSignInUp" }} {{ template "popupNewToDo" }} {{ template "popupEditToDo" }} {{ template "popupDeleteTodo" }}</div></body></html>{{ end }}
+{{ define "todo" }}
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <title>MyToDO</title>
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script defer src="../.././static/assets/main.439d3bb9a0d206b7ac82.js"></script></head>
+    <body>
+        <div class="wrapper">
+            <header class="header">
+                <aside class="header_aside">
+                    <div class="header_title">
+                        <h1>My utils</h1>
+                        <div class="burger"></div>
+                    </div>
+                    <nav class="header_nav">
+                        <div class="header_nav__item">
+                            <div class="header_nav__link">
+                                <a href="/"></a>
+                                <p>Home</p>
+                            </div>
+                            <div class="image"></div>
+                        </div>
+                        <div class="header_nav__item">
+                            <div class="header_nav__link">
+                                <a href="/todo"></a>
+                                <p>ToDo</p>
+                            </div>
+                            <div class="image active"></div>
+                        </div>
+                        <div class="header_nav__item">
+                            <div class="header_nav__link">
+                                <a href=""></a>
+                                <p>Goals</p>
+                            </div>
+                            <div class="image"></div>
+                        </div>
+                        <div class="header_nav__item">
+                            <div class="header_nav__link">
+                                <a href=""></a>
+                                <p>Plans</p>
+                            </div>
+                            <div class="image"></div>
+                        </div>
+                        <div class="header_nav__item">
+                            <div class="header_nav__link">
+                                <a href=""></a>
+                                <p>Tasks</p>
+                            </div>
+                            <div class="image"></div>
+                        </div>
+                        <div class="header_nav__item">
+                            <div class="header_nav__link">
+                                <a href=""></a>
+                                <p>Saved links</p>
+                            </div>
+                            <div class="image"></div>
+                        </div>
+                        <div class="header_nav__item">
+                            <div class="header_nav__link">
+                                <a href=""></a>
+                                <p>Options</p>
+                            </div>
+                            <div class="image"></div>
+                        </div>
+                        {{ if .UserLogin }}
+                        <div class="header_nav__item">
+                            <div class="header_nav__signout">
+                                <p>Sign Out</p>
+                            </div>
+                        </div>
+                        {{ else }}
+                        <div class="header_nav__item">
+                            <div class="header_nav__signin">
+                                <p>Sign In</p>
+                            </div>
+                        </div>
+                        <div class="header_nav__item">
+                            <div class="header_nav__signup">
+                                <p>Sign Up</p>
+                            </div>
+                        </div>
+                        {{ end }}
+                    </nav>
+                </aside>
+            </header>
+            <div class="header_background"></div>
+            <main class="main">
+                <div class="main_content">
+                    <div class="content_title">
+                        {{ if .UserLogin}}
+                        <h1>TODO | Hi! {{ .UserLogin }}</h1>
+                        {{ else }}
+                        <h1>TODO | Developers</h1>
+                        {{ end }}
+                    </div>
+                    <div class="content">
+                        <div class="content_block create">
+                            <div class="search_todo">
+                                <h2>Search todo for tag</h2>
+                                <div class="search_todo__inputs">
+                                    <input
+                                        type="text"
+                                        class="input search_todo_inp"
+                                        placeholder="Tag todo..."
+                                    />
+                                    <button class="btn search_todo_btn">
+                                        Search
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="new_todo">
+                                <button class="btn new_todo_btn">
+                                    New ToDo
+                                </button>
+                            </div>
+                        </div>
+                        <div class="content_block user">
+                            <h2>My ToDo-Recording</h2>
+                            <div class="content_block__items user">
+                                {{ range .UserTodo }}
+                                <div id="todo_{{ .IdTodo }}" class="todo_rec">
+                                    <div class="todo_rec__title">
+                                        <h2>{{ .Title }}</h2>
+                                        <h3>Tag: @{{ .Tag }}</h3>
+                                    </div>
+                                    <div class="todo_rec__content">
+                                        <p>{{ .Text }}</p>
+                                    </div>
+                                    <div class="todo_rec__footer">
+                                        <p class="show_more_todo">Подробнее...</p>
+                                        <p class="show_edit_todo">Редактировать</p>
+                                        <p class="show_delete_todo">Удалить</p>
+                                    </div>
+                                </div>
+                                {{ end }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+            {{ template "popupSignInUp" }} 
+            {{ template "popupNewToDo" }}
+            {{ template "popupEditToDo" }}
+            {{ template "popupDeleteTodo" }}
+            {{ template "popupMoreTodo" }}
+        </div>
+    </body>
+</html>
+{{ end }}

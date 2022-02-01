@@ -17,12 +17,14 @@ const (
 	pathPopupNewToDo     string = "./ui/html/template/NewTodo.html"
 	pathPopupDeleteTodo  string = "./ui/html/template/DeleteTodo.html"
 	pathPopupEditTodo    string = "./ui/html/template/EditTodo.html"
-	pathTodoTpl          string = "./ui/html/pages/Todo.html"
-	pathIndexTpl         string = "./ui/html/index.html"
+	pathPopupMoreTodo    string = "./ui/html/template/MoreTodo.html"
+
+	pathTodoTpl  string = "./ui/html/pages/Todo.html"
+	pathIndexTpl string = "./ui/html/index.html"
 )
 
 func todoPage(w http.ResponseWriter, r *http.Request) {
-	tpl, err := template.ParseFiles(pathTodoTpl, pathPopupSignInUpTpl, pathPopupNewToDo, pathPopupDeleteTodo, pathPopupEditTodo)
+	tpl, err := template.ParseFiles(pathTodoTpl, pathPopupSignInUpTpl, pathPopupNewToDo, pathPopupDeleteTodo, pathPopupEditTodo, pathPopupMoreTodo)
 	if err != nil {
 		fmt.Println(err)
 		return

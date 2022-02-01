@@ -1,8 +1,5 @@
 import MD5 from "crypto-js/md5";
 
-const mainBlock = document.querySelector(".main");
-
-
 const popupData = {
     popupSignInUp: {
         isPopup: null,
@@ -25,7 +22,7 @@ const popupData = {
             rightSelector: null,
         },
     },
-    closePopup: document.querySelectorAll(".popup-close"),
+    closePopup: document.querySelectorAll(".popup_close"),
 };
 
 class SetPopup {
@@ -34,9 +31,12 @@ class SetPopup {
     }
 
     setSignInUp() {
-        this.$pp.popupSignInUp.btnReg = document.querySelector(".header_nav__signin");
-        this.$pp.popupSignInUp.btnSign =
-            document.querySelector(".header_nav__signup");
+        this.$pp.popupSignInUp.btnReg = document.querySelector(
+            ".header_nav__signup"
+        );
+        this.$pp.popupSignInUp.btnSign = document.querySelector(
+            ".header_nav__signin"
+        );
 
         this.$pp.popupSignInUp.isPopup = document.querySelector(".popup_sign");
         this.$pp.popupSignInUp.signInBtn =
@@ -60,10 +60,10 @@ class SetActiveBtn {
     removeActiveClass(key) {
         switch (key) {
             case "left":
-                this.$in.classList.remove("active_popup_btn");
+                this.$lt.classList.remove("active_popup_btn");
                 break;
             case "right":
-                this.$up.classList.remove("active_popup_btn");
+                this.$rt.classList.remove("active_popup_btn");
                 break;
         }
     }
@@ -71,10 +71,10 @@ class SetActiveBtn {
     addActiveClass(key) {
         switch (key) {
             case "left":
-                this.$in.classList.add("active_popup_btn");
+                this.$lt.classList.add("active_popup_btn");
                 break;
             case "right":
-                this.$up.classList.add("active_popup_btn");
+                this.$rt.classList.add("active_popup_btn");
                 break;
         }
     }
@@ -86,13 +86,13 @@ class SelectorPopupSection {
         this.$rt = rightBtn;
     }
 
-    selectSignUp() {
-        this.$in.style.left = "-100%";
-        this.$up.style.right = "0";
+    selectLeft() {
+        this.$lt.style.left = "-100%";
+        this.$rt.style.right = "0";
     }
-    selectSignIn() {
-        this.$in.style.left = null;
-        this.$up.style.right = null;
+    selectRight() {
+        this.$lt.style.left = null;
+        this.$rt.style.right = null;
     }
 }
 
@@ -125,13 +125,13 @@ class TemplatesPopup {
     }
 
     closePopup() {
-        closePopup.forEach((item) => {
+        popupData.closePopup.forEach((item) => {
             item.addEventListener("click", () => {
-                this.$pop.classList.add("hide_popup")
+                this.$pop.classList.add("hide_popup");
                 setTimeout(() => {
                     this.$pop.style.display = "none";
-                    this.$pop.classList.remove("hide_popup")
-                }, 290)
+                    this.$pop.classList.remove("hide_popup");
+                }, 290);
             });
         });
     }
@@ -168,8 +168,7 @@ const showPopupSignInUp = (setActiveBtn, selectorPopupSection) => {
     });
 };
 
-const eventBtnPopup = () => {
-
+const eventBtnPopupSignInUp = () => {
     const setActiveBtn = new SetActiveBtn(
         popupData.popupSignInUp.signInBtn,
         popupData.popupSignInUp.signUpBtn
@@ -178,20 +177,21 @@ const eventBtnPopup = () => {
         popupData.popupSignInUp.popupSelectors.leftSelector,
         popupData.popupSignInUp.popupSelectors.rightSelector
     );
-
-    popupData.popupSignInUp.btnReg.addEventListener("click", () => {
-        return (function () {
-            showPopupSignInUp(setActiveBtn, selectorPopupSection);
-        })();
-    });
-    popupData.popupSignInUp.btnSign.addEventListener("click", () => {
-        return (function () {
-            setActiveBtn.removeActiveClass("left");
-            setActiveBtn.addActiveClass("right");
-            selectorPopupSection.selectLeft();
-            showPopupSignInUp(setActiveBtn, selectorPopupSection);
-        })();
-    });
+    if (popupData.popupSignInUp.btnSign && popupData.popupSignInUp.btnReg) {
+        popupData.popupSignInUp.btnSign.addEventListener("click", () => {
+            return (function () {
+                showPopupSignInUp(setActiveBtn, selectorPopupSection);
+            })();
+        });
+        popupData.popupSignInUp.btnReg.addEventListener("click", () => {
+            return (function () {
+                setActiveBtn.removeActiveClass("left");
+                setActiveBtn.addActiveClass("right");
+                selectorPopupSection.selectLeft();
+                showPopupSignInUp(setActiveBtn, selectorPopupSection);
+            })();
+        });
+    }
     popupData.closePopup.forEach((item) => {
         item.addEventListener("click", () => {
             return (function () {
@@ -203,7 +203,6 @@ const eventBtnPopup = () => {
         });
     });
 };
-eventBtnPopup();
 
 const showNewTodo = () => {
     if (document.querySelector(".popup.popup_newtodo")) {
@@ -252,7 +251,46 @@ const showEditTodo = () => {
 };
 showEditTodo();
 
-if (document.querySelector(".popup.popup-sign")) {
+const showMoreTodo = () => {
+    if (document.querySelector(".popup.popup_moretodo")) {
+        let btnShowPopup = document.querySelectorAll(".show_more_todo");
+        let popupMoreTodo = document.querySelector(".popup.popup_moretodo");
+
+        btnShowPopup.forEach((item) => {
+            item.addEventListener("click", (event) => {
+                return (function () {
+                    popupMoreTodo.style.display = null;
+
+                    const todoId = event.path[2].id
+
+                    const title = document.querySelector(
+                        `#${todoId} > .todo_rec__title > h2`
+                    ).innerHTML;
+                    const tag = document
+                        .querySelector(`#${todoId} > .todo_rec__title > h3`)
+                        .innerHTML.replace(/Tag: @/g, "");
+                    const text = document.querySelector(
+                        `#${todoId} > .todo_rec__content > p`
+                    ).innerText;
+
+                    const titleBlock =
+                        document.querySelector(".moretodo_title");
+                    const tagBlock = document.querySelector(".moretodo_tag");
+                    const textBlock = document.querySelector(".moretodo_text");
+
+                    titleBlock.innerHTML = `Заголовок | ${title}`;
+                    tagBlock.innerHTML = `Тэг | @${tag}`;
+                    textBlock.innerHTML = text;
+                })();
+            });
+        });
+
+        new TemplatesPopup(null, popupMoreTodo, null).closePopup();
+    }
+};
+showMoreTodo();
+
+if (document.querySelector(".popup.popup_sign")) {
     const setPopup = new SetPopup(popupData);
     setPopup.setSignInUp(), eventBtnPopupSignInUp();
 }
@@ -300,8 +338,6 @@ function userEditTodo(elem) {
         const text = document.querySelector(
             `#${elem} > .todo_rec__content > p`
         ).innerText;
-
-        const todoId = elem.replace(/todo_/g, "")
 
         const inputTitle = document.getElementById("edittodo_title");
         const inputTag = document.getElementById("edittodo_tag");

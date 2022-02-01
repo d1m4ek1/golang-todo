@@ -67,6 +67,10 @@ module.exports = {
             filename: "./html/template/EditTodo.html",
             template: "./src/html/popups/EditTodo.html"
         }),
+        new HtmlWebpackPlugin({
+            filename: "./html/template/MoreTodo.html",
+            template: "./src/html/popups/MoreTodo.html"
+        }),
         // new FaviconsWebpackPlugin({
         //     logo: './src/images/header/logo.png',
         //     prefix: "./static/images/"
