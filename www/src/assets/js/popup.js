@@ -317,11 +317,11 @@ function userDeleteTodo(elem) {
             return (function () {
                 xhr.open(
                     "POST",
-                    `/delete_todo?todoId=${elem.replace(/todo_/g, "")}`
+                    `/dev_edition_v0_0_12token_17devdvp09high2002/delete_todo?todoId=${elem.replace(/todo_/g, "")}`
                 );
                 xhr.send();
 
-                window.location.href = "/todo";
+                window.location.href = "/dev_edition_v0_0_12token_17devdvp09high2002/todo";
             })();
         });
     }
@@ -358,7 +358,7 @@ function userEditTodo(elem) {
             return (function () {
                 xhr.open(
                     "POST",
-                    `/edit_todo?todoId=${elem.replace(/todo_/g, "")}&title=${
+                    `/dev_edition_v0_0_12token_17devdvp09high2002/edit_todo?todoId=${elem.replace(/todo_/g, "")}&title=${
                         inputTitle.value
                     }&tag=${inputTag.value}&text=${inputText.value}`
                 );
@@ -371,7 +371,7 @@ function userEditTodo(elem) {
                     }
                 });
 
-                window.location.href = "/todo";
+                window.location.href = "/dev_edition_v0_0_12token_17devdvp09high2002/todo";
             })();
         });
     }

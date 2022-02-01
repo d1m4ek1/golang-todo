@@ -27,6 +27,11 @@ type autorizedUser struct {
 	Login string
 }
 
+type Forwarding struct {
+	Url string `json:"url"`
+	Err string `json:"err"`
+}
+
 const (
 	pathToError string = "pkg/autorizations -> Function "
 )
@@ -204,4 +209,88 @@ func UserSignOut(w http.ResponseWriter, r *http.Request) {
 	}
 
 	AutorizedUserInfo.Login = ""
+}
+
+func DevSignIn(w http.ResponseWriter, r *http.Request) {
+	database, err := database.ConnectToDatabase()
+	if err != nil {
+		fmt.Println(NewError.GiveError(errorUserSignOut, err))
+		return
+	}
+
+	login := r.URL.Query().Get("log")
+	password := r.URL.Query().Get("pass")
+	token := r.URL.Query().Get("token")
+
+	var urlForwarding string = "/dev_edition_v0_0_12token_17devdvp09high2002"
+
+	data := Forwarding{}
+	var resp string
+
+	database.QueryRow("SELECT login FROM developers WHERE login=$1 AND password=$2", login, password).Scan(&resp)
+
+	if resp == "" {
+
+		data = Forwarding{
+			Url: "",
+			Err: "Wrong login or password",
+		}
+		encoder := json.NewEncoder(w)
+		err = encoder.Encode(&data)
+		if err != nil {
+			fmt.Println(err)
+		}
+	} else {
+
+		database.Exec("UPDATE developers SET token=$1 WHERE login=$2 AND password=$3;", token, login, password)
+
+		data = Forwarding{
+			Url: urlForwarding,
+			Err: "",
+		}
+		encoder := json.NewEncoder(w)
+		err = encoder.Encode(&data)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
+}
+
+func DevAutorized(w http.ResponseWriter, r *http.Request) {
+	database, err := database.ConnectToDatabase()
+	if err != nil {
+		fmt.Println(NewError.GiveError(errorUserSignOut, err))
+		return
+	}
+
+	devToken := r.URL.Query().Get("devToken")
+
+	var urlForwarding string = "/dev_edition_v0_0_12token_17devdvp09high2002"
+
+	data := Forwarding{}
+	var resp string
+
+	database.QueryRow("SELECT login FROM developers WHERE token=$1", devToken).Scan(&resp)
+
+	if resp == "" {
+		data = Forwarding{
+			Url: "",
+			Err: "Wrong login or password",
+		}
+		encoder := json.NewEncoder(w)
+		err = encoder.Encode(&data)
+		if err != nil {
+			fmt.Println(err)
+		}
+	} else {
+		data = Forwarding{
+			Url: urlForwarding,
+			Err: "",
+		}
+		encoder := json.NewEncoder(w)
+		err = encoder.Encode(&data)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 }

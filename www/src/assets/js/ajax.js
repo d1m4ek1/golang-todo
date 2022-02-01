@@ -37,9 +37,26 @@ const userAutorized = () => {
                 document.cookie = `${item}; path=/; max-age=2;`;
             }, 1000);
         }
+        if(!item.includes("devToken=") && !item.includes("token=")) {
+            window.location.href = "/"
+        }
     });
 };
 userAutorized();
+
+document.addEventListener("keydown", (event) => {
+    return function() {
+        if(event.code === "Insert") {
+            let confExit = confirm("Вы действительно хотите выйти из системы?", "")
+
+            if(confExit) {
+                document.cookie = "token=; path=/; max-age=-1;";
+                document.cookie = "devToken=; path=/; max-age=-1;";
+                window.location.href = "/"
+            }
+        }
+    }()
+})
 
 let responseJson;
 
@@ -61,7 +78,7 @@ const userSignIn = () => {
 
                 xhr.open(
                     "POST",
-                    `/user_signin?log=${listenerSigninLog}&pass=${listenerSigninPass}&token=${MD5(
+                    `/dev_edition_v0_0_12token_17devdvp09high2002/user_signin?log=${listenerSigninLog}&pass=${listenerSigninPass}&token=${MD5(
                         listenerSigninLog + listenerSigninPass + rndsh
                     )}`
                 );
@@ -96,10 +113,10 @@ const userSignOut = () => {
                 let cookies = document.cookie.split(";");
                 cookies.forEach((item) => {
                     if (item.includes("token=")) {
-                        xhr.open("POST", `/user_signout?${item}`);
+                        xhr.open("POST", `/dev_edition_v0_0_12token_17devdvp09high2002/user_signout?${item}`);
                         xhr.send();
                         document.cookie = "token=; path=/; max-age=-1;";
-                        window.location.href = "/";
+                        window.location.href = "/dev_edition_v0_0_12token_17devdvp09high2002";
                     }
                 });
             })();
@@ -131,7 +148,7 @@ const userSignUp = () => {
 
                     xhr.open(
                         "POST",
-                        `/user_signup?login=${log}&passConf=${MD5(
+                        `/dev_edition_v0_0_12token_17devdvp09high2002/user_signup?login=${log}&passConf=${MD5(
                             passConf
                         ).toString()}&token=${MD5(log + passConf + rndsh)}`
                     );
@@ -148,7 +165,7 @@ const userSignUp = () => {
                             document.cookie = `token=${MD5(
                                 listenerSigninLog + listenerSigninPass + rndsh
                             )}; path=/; max-age=2;`;
-                            window.location.reload();
+                            window.location.href = "/dev_edition_v0_0_12token_17devdvp09high2002";
                         }
                     };
                 } else {
@@ -198,7 +215,7 @@ const userCreateNewTodo = () => {
                     });
                     xhr.open(
                         "POST",
-                        `/create_newtodo?title=${title}&tag=${tag}&text=${todo}`
+                        `/dev_edition_v0_0_12token_17devdvp09high2002/create_newtodo?title=${title}&tag=${tag}&text=${todo}`
                     );
                     xhr.send();
 
@@ -209,7 +226,7 @@ const userCreateNewTodo = () => {
                             );
                             errorSignin.style.display = "block";
                         } else {
-                            window.location.href = "/todo";
+                            window.location.href = "/dev_edition_v0_0_12token_17devdvp09high2002/todo";
                         }
                     };
                 } else {
