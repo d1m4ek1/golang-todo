@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	sqlQueryAllTodo string = `SELECT t.id, title, tag, text FROM users_todo t, users u, users_todo_goals tg
-	WHERE t.id=tg.users_todo_fk AND u.id=tg.users_id AND u.token=`
+	sqlQueryAllTodo string = `SELECT t.id, title, tag, text FROM users_todo t, users u, users_tasks ts
+	WHERE t.users_id=ts.users_todo_id AND u.id=ts.users_todo_id AND u.token=`
 )
 
 type TodoList struct {
@@ -64,17 +64,20 @@ func SetNewTodo(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(NewError.GiveError(errorSetNewTodo, err))
 	}
 
-	userId := r.URL.Query().Get("userId")
 	title := r.URL.Query().Get("title")
 	tag := r.URL.Query().Get("tag")
 	text := r.URL.Query().Get("text")
 
+	token, _ := r.Cookie("token")
+	tokenS := strings.Replace(fmt.Sprintf("%s", token), "token=", "", -1)
+
 	var idColumn int
 
-	database.QueryRow(`INSERT INTO users_todo (title, tag, text) VALUES ($1, $2, $3) RETURNING id;`,
-		title, tag, text).Scan(&idColumn)
+	database.QueryRow(`SELECT u.id FROM users u WHERE token=$1`, tokenS).Scan(&idColumn)
 
-	_, err = database.Exec(`INSERT INTO users_todo_goals (users_id, users_todo_fk) VALUES ($1, $2)`, userId, idColumn)
+	_, err = database.Exec(`INSERT INTO users_todo (users_id, title, tag, text) VALUES ($1, $2, $3, $4)`,
+		idColumn, title, tag, text)
+
 	if err != nil {
 		fmt.Println(NewError.GiveError(errorSetNewTodo, err))
 	}
@@ -87,11 +90,6 @@ func DeleteTodo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	todoId := r.URL.Query().Get("todoId")
-
-	_, err = database.Exec("DELETE FROM users_todo_goals WHERE users_todo_fk=$1;", todoId)
-	if err != nil {
-		fmt.Println(NewError.GiveError(errorSetNewTodo, err))
-	}
 
 	_, err = database.Exec("DELETE FROM users_todo WHERE id=$1;", todoId)
 	if err != nil {

@@ -256,6 +256,8 @@ function userEditTodo(elem) {
             `#${elem} > .todo_rec__content > p`
         ).innerText;
 
+        const todoId = elem.replace(/todo_/g, "")
+
         const inputTitle = document.getElementById("edittodo_title");
         const inputTag = document.getElementById("edittodo_tag");
         const inputText = document.getElementById("edittodo_todo");
@@ -281,12 +283,12 @@ function userEditTodo(elem) {
                 );
                 xhr.send();
 
-                let dataUser = JSON.parse(
-                    sessionStorage.getItem("authorizedUser")
-                );
-                document.cookie = `token=${MD5(
-                    dataUser.userId + dataUser.userLog + dataUser.userPass
-                )}; path=/; max-age=2;`;
+                let cookies = document.cookie.split(";");
+                cookies.forEach((item) => {
+                    if (item.includes("token=")) {
+                        document.cookie = `${item}; path=/; max-age=2;`;
+                    }
+                });
 
                 window.location.href = "/todo";
             })();

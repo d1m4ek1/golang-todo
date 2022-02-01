@@ -38,32 +38,38 @@ var (
 	errorSigninUser    string = pathToError + "signinUser"
 	errorUserAutorized string = pathToError + "UserAutorized"
 	errorSignUpUser    string = pathToError + "SignUpUser"
+	errorUserSignOut   string = pathToError + "UserSignOut"
 )
 
 // SQL QUERYS
 var (
-	sqlQuerySigninInUser  string = "SELECT id, login, password FROM users WHERE login=$1 AND password=$2"
-	sqlQueryUserAutorized string = "SELECT login FROM users u WHERE u.login=$1 AND u.password=$2"
-	sqlQueryCountColumn   string = "SELECT COUNT(*) FROM users"
+	sqlQuerySigninInUser string = "SELECT id, login, password FROM users WHERE login=$1 AND password=$2"
+	sqlQueryCountColumn  string = "SELECT COUNT(*) FROM users"
+	// SELECT LOGIN
+	userAutorizedSelLog string = "SELECT login FROM users s WHERE s.token=$1"
+	// DELETE TOKEN
+	userSignOutDelToken string = "UPDATE users s SET token=NULL WHERE s.token=$1"
 )
 
-func UserAutorized(token, log, pass string) {
+func UserAutorized(w http.ResponseWriter, r *http.Request) {
 
 	database, err := database.ConnectToDatabase()
 	if err != nil {
 		fmt.Println(NewError.GiveError(errorUserAutorized, err))
 	}
 
-	_, err = database.Exec("UPDATE users u SET token=$1 WHERE u.login=$2 AND u.password=$3;", token, log, pass)
-	if err != nil {
-		fmt.Println(NewError.GiveError(errorUserAutorized, err))
-	}
+	token, _ := r.Cookie("token")
+	tokenS := strings.Replace(fmt.Sprintf("%s", token), "token=", "", -1)
 
-	result := database.QueryRow(sqlQueryUserAutorized, log, pass)
+	if token != nil {
+		result := database.QueryRow(userAutorizedSelLog, tokenS)
 
-	err = result.Scan(&AutorizedUserInfo.Login)
-	if err != nil {
-		fmt.Println(NewError.GiveError(errorUserAutorized, err))
+		err = result.Scan(&AutorizedUserInfo.Login)
+		if err != nil {
+			fmt.Println(NewError.GiveError(errorUserAutorized, err))
+		}
+	} else {
+		AutorizedUserInfo.Login = ""
 	}
 }
 
@@ -76,6 +82,7 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 
 	login := r.URL.Query().Get("log")
 	password := r.URL.Query().Get("pass")
+	token := r.URL.Query().Get("token")
 
 	userSignIn := UserSignIn{}
 	result := database.QueryRow(sqlQuerySigninInUser, login, password)
@@ -102,10 +109,12 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 
 	if userSignIn.Login == login && userSignIn.Password == password {
 
-		token, _ := r.Cookie("token")
-		tokenS := strings.Replace(fmt.Sprintf("%s", token), "token=", "", -1)
+		_, err = database.Exec("UPDATE users u SET token=$1 WHERE u.login=$2 AND u.password=$3;", token, login, password)
+		if err != nil {
+			fmt.Println(NewError.GiveError(errorUserAutorized, err))
+		}
 
-		UserAutorized(tokenS, login, password)
+		UserAutorized(w, r)
 
 		AutorizedUserInfo.Login = login
 
@@ -180,5 +189,19 @@ func SignUpUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func UserSignOut(w http.ResponseWriter, r *http.Request) {
+
+	database, err := database.ConnectToDatabase()
+	if err != nil {
+		fmt.Println(NewError.GiveError(errorUserSignOut, err))
+		return
+	}
+
+	token := r.URL.Query().Get("token")
+
+	_, err = database.Exec(userSignOutDelToken, token)
+	if err != nil {
+		fmt.Println(NewError.GiveError(errorUserSignOut, err))
+	}
+
 	AutorizedUserInfo.Login = ""
 }

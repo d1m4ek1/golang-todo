@@ -28,6 +28,7 @@ func todoPage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	autorizations.UserAutorized(w, r)
 	Data := struct {
 		UserLogin string
 		UserTodo  []todo.TodoList
@@ -52,6 +53,7 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 		autorizations.AutorizedUserInfo.Login = ""
 	}
 
+	autorizations.UserAutorized(w, r)
 	Data := struct {
 		UserLogin string
 	}{

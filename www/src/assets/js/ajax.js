@@ -18,51 +18,28 @@ const xhr = new XMLHttpRequest();
 
 let listenerSigninLog, listenerSigninPass;
 
-const userAutorized = () => {
-    if (sessionStorage.getItem("authorizedUser")) {
-        let dataUser = JSON.parse(sessionStorage.getItem("authorizedUser"));
-        setInterval(() => {
-            document.cookie = `token=${MD5(
-                dataUser.userId + dataUser.userLog + dataUser.userPass
-            )}; path=/; max-age=2;`;
-        }, 1000);
-
-        xhr.open(
-            "POST",
-            `/user_signin?log=${dataUser.userLog}&pass=${dataUser.userPass}`
-        );
-        xhr.send();
-    } else {
-        xhr.open("GET", `/user_signout`);
-        xhr.send();
+function _RNDSH(sumString) {
+    const symbolArr =
+        "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+    var rtsdnr = "";
+    for (let i = 0; i < sumString; i++) {
+        var index = Math.floor(Math.random() * symbolArr.length);
+        rtsdnr += symbolArr[index];
     }
+    return rtsdnr;
+}
+
+const userAutorized = () => {
+    let cookies = document.cookie.split(";");
+    cookies.forEach((item) => {
+        if (item.includes("token=")) {
+            setInterval(() => {
+                document.cookie = `${item}; path=/; max-age=2;`;
+            }, 1000);
+        }
+    });
 };
 userAutorized();
-
-const forwarding = (status) => {
-    if (!status) {
-        errorSignin.style.display = "block";
-        errorSignin.innerHTML = responseJson.err;
-    } else {
-        sessionStorage.setItem(
-            "authorizedUser",
-            JSON.stringify({
-                userId: responseJson.idUser,
-                userLog: responseJson.login,
-                userPass: responseJson.pass,
-            })
-        );
-        let dataUser = JSON.parse(
-            sessionStorage.getItem("authorizedUser")
-        );
-        document.cookie = `token=${MD5(
-            dataUser.userId +
-                dataUser.userLog +
-                dataUser.userPass
-        )}; path=/; max-age=2;`;
-        window.location.href = "/";
-    }
-}
 
 let responseJson;
 
@@ -80,21 +57,31 @@ const userSignIn = () => {
     signinBtn.addEventListener("click", () => {
         return (function () {
             if ((signinLog != "", signinPass != "")) {
+                let rndsh = _RNDSH(10);
+
                 xhr.open(
                     "POST",
-                    `/user_signin?log=${listenerSigninLog}&pass=${listenerSigninPass}`
+                    `/user_signin?log=${listenerSigninLog}&pass=${listenerSigninPass}&token=${MD5(
+                        listenerSigninLog + listenerSigninPass + rndsh
+                    )}`
                 );
                 xhr.responseType = "json";
                 xhr.send();
+                responseJson = xhr.response
 
                 xhr.onload = function () {
                     if (xhr.status != 200) {
                         console.log(`Ошибка ${xhr.status}: ${xhr.statusText}`);
                     } else {
-                        responseJson = xhr.response;
-                        forwarding(responseJson.completed);
+                        document.cookie = `token=${MD5(
+                            listenerSigninLog + listenerSigninPass + rndsh
+                        )}; path=/; max-age=2;`;
+                        window.location.reload();
                     }
                 };
+            } else {
+                errorSignin.style.display = "block";
+                errorSignin.innerHTML = responseJson.err
             }
         })();
     });
@@ -106,11 +93,15 @@ const userSignOut = () => {
         const btnSignOut = document.querySelector(".header_nav__signout");
         btnSignOut.addEventListener("click", () => {
             return (function () {
-                xhr.open("GET", "/user_signout");
-                xhr.send();
-                sessionStorage.removeItem("authorizedUser");
-                document.cookie = "token=; path=/; max-age=-1;";
-                window.location.href = "/";
+                let cookies = document.cookie.split(";");
+                cookies.forEach((item) => {
+                    if (item.includes("token=")) {
+                        xhr.open("POST", `/user_signout?${item}`);
+                        xhr.send();
+                        document.cookie = "token=; path=/; max-age=-1;";
+                        window.location.href = "/";
+                    }
+                });
             })();
         });
     }
@@ -135,24 +126,38 @@ const userSignUp = () => {
     signupBtn.addEventListener("click", () => {
         return (function () {
             if (log !== "" && pass !== "" && passConf !== "") {
+                if (pass === passConf) {
+                    let rndsh = _RNDSH(10);
 
-                xhr.open(
-                    "POST",
-                    `/user_signup?login=${log}&passConf=${MD5(
-                        passConf
-                    ).toString()}`
-                );
-                xhr.responseType = "json";
-                xhr.send();
+                    xhr.open(
+                        "POST",
+                        `/user_signup?login=${log}&passConf=${MD5(
+                            passConf
+                        ).toString()}&token=${MD5(log + passConf + rndsh)}`
+                    );
+                    xhr.responseType = "json";
+                    xhr.send();
+                    responseJson = xhr.response
 
-                xhr.onload = function () {
-                    if (xhr.status != 200) {
-                        console.log(`Ошибка ${xhr.status}: ${xhr.statusText}`);
-                    } else {
-                        responseJson = xhr.response;
-                        forwarding(responseJson.completed);
-                    }
-                };
+                    xhr.onload = function () {
+                        if (xhr.status != 200) {
+                            console.log(
+                                `Ошибка ${xhr.status}: ${xhr.statusText}`
+                            );
+                        } else {
+                            document.cookie = `token=${MD5(
+                                listenerSigninLog + listenerSigninPass + rndsh
+                            )}; path=/; max-age=2;`;
+                            window.location.reload();
+                        }
+                    };
+                } else {
+                    errorSignup.style.display = "block";
+                    errorSignup.innerHTML = responseJson.err
+                }
+            } else {
+                errorSignup.style.display = "block";
+                errorSignup.innerHTML = responseJson.err
             }
         })();
     });
@@ -185,26 +190,25 @@ const userCreateNewTodo = () => {
         newtodoBtn.addEventListener("click", () => {
             return (function () {
                 if (title !== "" && tag !== "" && todo !== "") {
-                    let dataUser = JSON.parse(
-                        sessionStorage.getItem("authorizedUser")
-                    );
-                    document.cookie = `token=${MD5(
-                        dataUser.userId + dataUser.userLog + dataUser.userPass
-                    )}; path=/; max-age=2;`;
-
+                    let cookies = document.cookie.split(";");
+                    cookies.forEach((item) => {
+                        if (item.includes("token=")) {
+                            document.cookie = `${item}; path=/; max-age=2;`;
+                        }
+                    });
                     xhr.open(
                         "POST",
-                        `/create_newtodo?userId=${dataUser.userId}&title=${title}&tag=${tag}&text=${todo}`
+                        `/create_newtodo?title=${title}&tag=${tag}&text=${todo}`
                     );
                     xhr.send();
 
                     xhr.onload = function () {
                         if (xhr.status != 200) {
-                            console.log(`Ошибка ${xhr.status}: ${xhr.statusText}`);
+                            console.log(
+                                `Ошибка ${xhr.status}: ${xhr.statusText}`
+                            );
                             errorSignin.style.display = "block";
                         } else {
-                            responseJson = xhr.response;
-                            forwarding(responseJson.completed);
                             window.location.href = "/todo";
                         }
                     };
