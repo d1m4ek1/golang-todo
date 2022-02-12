@@ -41,7 +41,6 @@
     height: 4px;
     background-color: black;
 }
-
 .content_block {
     padding: 20px;
     box-shadow: 0 5px 15px rgb(0, 0, 0, 0.3);
@@ -62,5 +61,28 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap;
+}
+@media screen and (max-width: 1200px) {
+    .main {
+        margin: 10px 20px;
+    }
+}
+@media screen and (max-width: 960px) {
+    .content_block__items.user {
+        flex-direction: column;
+    }
+    .todo_rec {
+        width: 100% !important;
+    }
+}
+@media screen and (max-width: 500px) {
+    .main {
+        margin: 0;
+    }
+    .main_content {
+        padding: 60px 10px 10px 10px;
+    }
+    .content_block {
+        padding: 10px;
+    }
 }

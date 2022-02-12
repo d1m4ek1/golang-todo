@@ -60,7 +60,7 @@ func UserAutorized(w http.ResponseWriter, r *http.Request) {
 
 	database, err := database.ConnectToDatabase()
 	if err != nil {
-		fmt.Println(NewError.GiveError(errorUserAutorized, err))
+		fmt.Println(NewError.Wrap(errorUserAutorized, "Connect to db", err))
 	}
 
 	token, _ := r.Cookie("token")
@@ -71,7 +71,7 @@ func UserAutorized(w http.ResponseWriter, r *http.Request) {
 
 		err = result.Scan(&AutorizedUserInfo.Login)
 		if err != nil {
-			fmt.Println(NewError.GiveError(errorUserAutorized, err))
+			fmt.Println(NewError.Wrap(errorUserAutorized, "Condition for token", err))
 		}
 	} else {
 		AutorizedUserInfo.Login = ""
@@ -81,7 +81,7 @@ func UserAutorized(w http.ResponseWriter, r *http.Request) {
 func SignInUser(w http.ResponseWriter, r *http.Request) {
 	database, err := database.ConnectToDatabase()
 	if err != nil {
-		fmt.Println(NewError.GiveError(errorSigninUser, err))
+		fmt.Println(NewError.Wrap(errorSigninUser, "Connect to db", err))
 		return
 	}
 
@@ -104,10 +104,8 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 			Completed: false,
 			Err:       "Wrong login or password",
 		}
-		encoder := json.NewEncoder(w)
-		err = encoder.Encode(&j)
-		if err != nil {
-			fmt.Println(NewError.GiveError(errorSigninUser, err))
+		if err := json.NewEncoder(w).Encode(&j); err != nil {
+			fmt.Println(NewError.Wrap(errorSigninUser, "json encoder -> 'IN ERROR'", err))
 		}
 		return
 	}
@@ -116,7 +114,7 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 
 		_, err = database.Exec("UPDATE users u SET token=$1 WHERE u.login=$2 AND u.password=$3;", token, login, password)
 		if err != nil {
-			fmt.Println(NewError.GiveError(errorUserAutorized, err))
+			fmt.Println(NewError.Wrap(errorSigninUser, "Query to db", err))
 		}
 
 		UserAutorized(w, r)
@@ -134,7 +132,7 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 		encoder := json.NewEncoder(w)
 		err = encoder.Encode(&j)
 		if err != nil {
-			fmt.Println(NewError.GiveError(errorSigninUser, err))
+			fmt.Println(NewError.Wrap(errorSigninUser, "json encoder", err))
 		}
 	}
 }
@@ -142,21 +140,22 @@ func SignInUser(w http.ResponseWriter, r *http.Request) {
 func SignUpUser(w http.ResponseWriter, r *http.Request) {
 	database, err := database.ConnectToDatabase()
 	if err != nil {
-		fmt.Println(NewError.GiveError(errorSignUpUser, err))
+		fmt.Println(NewError.Wrap(errorSignUpUser, "Connect to db", err))
 		return
 	}
 
 	login := r.URL.Query().Get("login")
 	password := r.URL.Query().Get("passConf")
+	token := r.URL.Query().Get("token")
 
 	var lenUsersTG int
 	len := database.QueryRow(sqlQueryCountColumn)
-	err = len.Scan(&lenUsersTG)
-	if err != nil {
-		fmt.Println(NewError.GiveError(errorSignUpUser, err))
+
+	if err = len.Scan(&lenUsersTG); err != nil {
+		fmt.Println(NewError.Wrap(errorSignUpUser, "Scan &lenUsersTG", err))
 	}
 
-	_, err = database.Exec("INSERT INTO users (login, password) VALUES ($1, $2)", login, password)
+	_, err = database.Exec("INSERT INTO users (login, password, token) VALUES ($1, $2, $3)", login, password, token)
 	if err != nil {
 		j := ResponseSignIn{
 			IdUsers:   0,
@@ -166,16 +165,21 @@ func SignUpUser(w http.ResponseWriter, r *http.Request) {
 			Err:       "Возможно логин указанный выше уже занят, попробуйте еще раз",
 		}
 
-		encoder := json.NewEncoder(w)
-		err = encoder.Encode(&j)
-		if err != nil {
-			fmt.Println(NewError.GiveError(errorSigninUser, err))
+		if err = json.NewEncoder(w).Encode(&j); err != nil {
+			fmt.Println(NewError.Wrap(errorSignUpUser, "json encoder -> 'IN ERROR'", err))
 		}
 	} else {
 
 		userSignIn := UserSignIn{}
 		result := database.QueryRow("SELECT id, login, password FROM users WHERE login=$1 AND password=$2;", login, password)
-		err = result.Scan(&userSignIn.Id, &userSignIn.Login, &userSignIn.Password)
+
+		if err = result.Scan(&userSignIn.Id, &userSignIn.Login, &userSignIn.Password); err != nil {
+			fmt.Println(NewError.Wrap(errorSignUpUser, "result.Scan()", err))
+		}
+
+		if _, err = database.Exec(`INSERT INTO users_tasks (users_todo_id) VALUES ($1)`, userSignIn.Id); err != nil {
+			fmt.Println(NewError.Wrap(errorSignUpUser, "Query to db", err))
+		}
 
 		j := ResponseSignIn{
 			IdUsers:   userSignIn.Id,
@@ -185,10 +189,8 @@ func SignUpUser(w http.ResponseWriter, r *http.Request) {
 			Err:       "",
 		}
 
-		encoder := json.NewEncoder(w)
-		err = encoder.Encode(&j)
-		if err != nil {
-			fmt.Println(NewError.GiveError(errorSigninUser, err))
+		if err = json.NewEncoder(w).Encode(&j); err != nil {
+			fmt.Println(NewError.Wrap(errorSignUpUser, "json encode", err))
 		}
 	}
 }
@@ -197,100 +199,15 @@ func UserSignOut(w http.ResponseWriter, r *http.Request) {
 
 	database, err := database.ConnectToDatabase()
 	if err != nil {
-		fmt.Println(NewError.GiveError(errorUserSignOut, err))
+		fmt.Println(NewError.Wrap(errorUserSignOut, "Connect to db", err))
 		return
 	}
 
 	token := r.URL.Query().Get("token")
 
-	_, err = database.Exec(userSignOutDelToken, token)
-	if err != nil {
-		fmt.Println(NewError.GiveError(errorUserSignOut, err))
+	if _, err = database.Exec(userSignOutDelToken, token); err != nil {
+		fmt.Println(NewError.Wrap(errorUserSignOut, "Query to db", err))
 	}
 
 	AutorizedUserInfo.Login = ""
-}
-
-func DevSignIn(w http.ResponseWriter, r *http.Request) {
-	database, err := database.ConnectToDatabase()
-	if err != nil {
-		fmt.Println(NewError.GiveError(errorUserSignOut, err))
-		return
-	}
-
-	login := r.URL.Query().Get("log")
-	password := r.URL.Query().Get("pass")
-	token := r.URL.Query().Get("token")
-
-	var urlForwarding string = "/dev_edition_v0_0_12token_17devdvp09high2002"
-
-	data := Forwarding{}
-	var resp string
-
-	database.QueryRow("SELECT login FROM developers WHERE login=$1 AND password=$2", login, password).Scan(&resp)
-
-	if resp == "" {
-
-		data = Forwarding{
-			Url: "",
-			Err: "Wrong login or password",
-		}
-		encoder := json.NewEncoder(w)
-		err = encoder.Encode(&data)
-		if err != nil {
-			fmt.Println(err)
-		}
-	} else {
-
-		database.Exec("UPDATE developers SET token=$1 WHERE login=$2 AND password=$3;", token, login, password)
-
-		data = Forwarding{
-			Url: urlForwarding,
-			Err: "",
-		}
-		encoder := json.NewEncoder(w)
-		err = encoder.Encode(&data)
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
-}
-
-func DevAutorized(w http.ResponseWriter, r *http.Request) {
-	database, err := database.ConnectToDatabase()
-	if err != nil {
-		fmt.Println(NewError.GiveError(errorUserSignOut, err))
-		return
-	}
-
-	devToken := r.URL.Query().Get("devToken")
-
-	var urlForwarding string = "/dev_edition_v0_0_12token_17devdvp09high2002"
-
-	data := Forwarding{}
-	var resp string
-
-	database.QueryRow("SELECT login FROM developers WHERE token=$1", devToken).Scan(&resp)
-
-	if resp == "" {
-		data = Forwarding{
-			Url: "",
-			Err: "Wrong login or password",
-		}
-		encoder := json.NewEncoder(w)
-		err = encoder.Encode(&data)
-		if err != nil {
-			fmt.Println(err)
-		}
-	} else {
-		data = Forwarding{
-			Url: urlForwarding,
-			Err: "",
-		}
-		encoder := json.NewEncoder(w)
-		err = encoder.Encode(&data)
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
 }

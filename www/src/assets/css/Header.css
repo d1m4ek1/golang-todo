@@ -8,9 +8,6 @@
     background-color: white;
     transition: .3s;
 }
-.header:hover {
-    left: 0;
-}
 .header_title {
     position: relative;
     display: flex;
@@ -28,6 +25,7 @@
     height: 31px;
     border-top: 5px solid black;
     border-bottom: 5px solid;
+    transition: .3s;
 }
 .burger::before {
     content: '';
@@ -37,6 +35,16 @@
     width: 100%;
     height: 5px;
     background-color: black;
+}
+.burger::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: black;
+    display: none;
 }
 .header_background {
     position: fixed;
@@ -49,13 +57,6 @@
     background-color: rgb(0, 0, 0, .4);
     opacity: 0;
     transition: .3s;
-}
-.header:hover + .header_background {
-    z-index: 99;
-    opacity: 1;
-}
-.header:hover + .header_background + .main {
-    margin-left: 170px;
 }
 .header_nav__item {
     position: relative;
@@ -165,4 +166,97 @@
 .header_nav__item:nth-child(7) .image,
 .header_nav__item:nth-child(7) .image.active::before {
     background-color: rgb(255, 0, 242);
+}
+@media screen and (min-width: 1200px) {
+    .header:hover {
+        left: 0;
+    }
+    .header:hover + .header_background {
+        z-index: 99;
+        opacity: 1;
+    }
+    .header:hover + .header_background + .main {
+        margin-left: 170px;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .header {
+        background-color: unset;
+        height: auto;
+        left: 0;
+        transition: .3s;
+    }
+    .header_title {
+        cursor: pointer;
+        background-color: white;
+        height: 45px;
+        border: 1px solid rgb(0, 0, 0, 0.1);
+        z-index: 1;
+    }
+    .header_nav {
+        position: absolute;
+        top: 45px;
+        left: 0;
+        display: none;
+        animation-name: showHeaderNav;
+        animation-duration: 1s;
+    }
+    @keyframes showHeaderNav {
+        from {
+            opacity: 0;
+            left: 100%;
+        }
+        to {
+            opacity: 1;
+            left: 0;
+        }
+    }
+    .header_nav_hide {
+        left: -100%;
+        animation-name: hideHeaderNav;
+        animation-duration: .5s;
+    }
+    @keyframes hideHeaderNav {
+        from {
+            opacity: 1;
+            left: 0;
+        }
+        to {
+            opacity: 0;
+            left: -100%;
+        }
+    }
+    .header_title.close_header .burger {
+        border: none;
+    }
+    .header_title.close_header .burger:before {
+        transform: rotate(45deg);
+        animation-name: rotateLinePlus;
+        animation-duration: .5s;
+    }
+    @keyframes rotateLinePlus {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(45deg);
+        }
+    }
+    .header_title.close_header .burger:after {
+        display: block;
+        transform: rotate(-45deg);
+        animation-name: rotateLineMinus;
+        animation-duration: .5s;
+    }
+    @keyframes rotateLineMinus {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(-45deg);
+        }
+    }
+    .header_background {
+        display: none;
+    }
 }

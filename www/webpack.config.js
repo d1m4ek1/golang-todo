@@ -5,7 +5,7 @@ const copyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     devtool: 'inline-source-map',
-    entry: {app: "./src/index.js", devIndex: "./src/devIndex.js"},
+    entry: {app: "./src/index.js"},
     output: {
         filename: './static/assets/[name].[chunkhash].js',
         library: "[name]",
@@ -56,33 +56,23 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             filename: "./html/template/Login.html",
-            template: "./src/html/popups/Login.html",
-            chunks: ["app"]
+            template: "./src/html/popups/Login.html"
         }),
         new HtmlWebpackPlugin({
             filename: "./html/template/NewTodo.html",
-            template: "./src/html/popups/NewTodo.html",
-            chunks: ["app"]
+            template: "./src/html/popups/NewTodo.html"
         }),
         new HtmlWebpackPlugin({
             filename: "./html/template/DeleteTodo.html",
-            template: "./src/html/popups/DeleteTodo.html",
-            chunks: ["app"]
+            template: "./src/html/popups/DeleteTodo.html"
         }),
         new HtmlWebpackPlugin({
             filename: "./html/template/EditTodo.html",
-            template: "./src/html/popups/EditTodo.html",
-            chunks: ["app"]
+            template: "./src/html/popups/EditTodo.html"
         }),
         new HtmlWebpackPlugin({
             filename: "./html/template/MoreTodo.html",
-            template: "./src/html/popups/MoreTodo.html",
-            chunks: ["app"]
-        }),
-        new HtmlWebpackPlugin({
-            filename: "./html/devIndex.html",
-            template: "./src/devIndex.html",
-            chunks: ["devIndex"]
+            template: "./src/html/popups/MoreTodo.html"
         }),
         // new FaviconsWebpackPlugin({
         //     logo: './src/images/header/logo.png',

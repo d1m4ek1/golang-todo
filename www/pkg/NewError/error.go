@@ -1,16 +1,23 @@
-package error
+package newerror
 
 import "fmt"
 
-type NewError struct {
-	String   string
-	ErrorStr error
+// Struct for structuring an error
+type Error struct {
+	StringFunction string
+	WhereError     string
+	ErrorStr       error
 }
 
-func GiveError(str string, err error) error {
-	setError := NewError{
-		String:   str,
-		ErrorStr: err,
+// Function that returns an error string
+func (ne *Error) Error() string {
+	return fmt.Sprintf("%s;\nWhere error: %s;\n%s", ne.StringFunction, ne.WhereError, ne.ErrorStr)
+}
+
+func Wrap(stringFunction, whereError string, errorStr error) *Error {
+	return &Error{
+		StringFunction: stringFunction,
+		WhereError:     whereError,
+		ErrorStr:       errorStr,
 	}
-	return fmt.Errorf("%s\n%s", setError.String, setError.ErrorStr)
 }
